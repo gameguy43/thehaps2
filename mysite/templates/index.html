@@ -8,13 +8,13 @@ $(function(){
         showOn: "both",
         buttonImage: "images/calendar.gif",
         buttonImageOnly: true
-    }
-    datetimepicker_options = {}
+    };
+    timepicker_options = datepicker_options;
 
     $('#start_date').datepicker(datepicker_options);
     $('#end_date').datepicker(datepicker_options);
-    $('#start_time').datetimepicker(datetimepicker_options);
-    $('#end_time').datetimepicker(datetimepicker_options);
+    $('#start_time').timepicker(timepicker_options);
+    $('#end_time').timepicker(timepicker_options);
 });
 
 </script>
@@ -51,6 +51,16 @@ End:
 <label for="start_date">time</label>
 <input type="time" name="end_time" id="end_time"/>
 <fieldset>
+
+<fieldset>
+<label for="location">Location:</label>
+<input type="text" name="location" id="location" />
+</fieldset>
+
+<fieldset>
+<label for="location">Other Info:</label>
+<textarea name="info" id="info"></textarea>
+</fieldset>
 
 </fieldset>
 <fieldset id="submit">

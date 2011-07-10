@@ -19,4 +19,6 @@ urlpatterns = patterns('',
     # to allow static files to be served by django (band-aid for now)
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT, 'show_indexes': True}),
+    (r'^images/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.STATIC_DOC_ROOT + 'images/', 'show_indexes': True}),
 )
