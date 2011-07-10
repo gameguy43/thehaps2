@@ -3,10 +3,15 @@
 <head> 
     <link rel="stylesheet" href="/static/styles.css" />
     <script type="text/javascript" src="/static/jquery.js"></script>
-    <script type="text/javascript" src="/static/jsincludes.js"></script>
+    <script type="text/javascript" src="/static/jquery-ui-1.8.14.custom.min.js"></script>
+    <script type="text/javascript" src="/static/jquery-ui-timepicker-addon.js"></script>
+
+    <title>CalendarIt</title>
+    
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <h1 id="title"><a href="/">Calendar It</a></h1>
+    <h1 id="title"><a href="/">CalendarIt</a></h1>
 
     {% block main %}{% endblock %}
 

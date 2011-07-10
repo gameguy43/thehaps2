@@ -1,0 +1,29 @@
+html{
+width: 100%
+padding: 20px;
+}
+body{
+    font-family: helvetica, arial, sans-serif;
+    width: 600px;
+    margin: auto;
+}
+h1{
+    font-family: helvetica, arial, sans-serif;
+    font-size: 3em;
+    text-align: right;
+}
+h1 a{
+    color: gray;
+    text-decoration: none;
+}
+h1 a:hover{
+
+}
+
+form#event-info-form{
+    background-color: #ededed;
+
+}
+form#event-info-form fieldset{
+    border: none;
+}
