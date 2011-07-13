@@ -15,6 +15,35 @@ $(function(){
     $('#end_date').datepicker(datepicker_options);
     $('#start_time').timepicker(timepicker_options);
     $('#end_time').timepicker(timepicker_options);
+    $('#submit').click(function(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax_add_event',
+            data: $('#event-info-form').serialize(),
+            success: function(data){
+                $('#result').show();
+                $('#result').append(data);
+            },
+            error: function(){
+                alert('aw, crud. an error.');
+            },
+        });
+        return false;
+    });
+    // grab the current time/date and set it as the defaults
+    now = new Date();
+    h = now.getHours();
+    m = now.getMinutes();
+    time = h + ':' + m;
+    d = now.getDate();
+    m = now.getMonth();
+    y = now.getFullYear();
+    date = m + '/' + d + '/' + y;
+
+    $('#start_date').val(date);
+    $('#end_date').val(date);
+    $('#start_time').val(time);
+    $('#end_time').val(time);
 });
 
 </script>
@@ -36,37 +65,66 @@ There is no step 3.
 <form id="event-info-form">
 <fieldset>
 
-Start:
 <fieldset>
-<label for="start_date">date</label>
-<input type="date" name="start_date" id="start_date"/>
-<label for="start_date">time</label>
-<input type="time" name="start_time" id="start_time"/>
-<fieldset>
-
-End:
-<fieldset id="end">
-<label for="start_date">date</label>
-<input type="date" name="end_date" id="end_date"/>
-<label for="start_date">time</label>
-<input type="time" name="end_time" id="end_time"/>
-<fieldset>
+<label for="title">
+Event title:
+</label>
+<input type="text" name="title" id="title" />
+</fieldset>
 
 <fieldset>
 <label for="location">Location:</label>
 <input type="text" name="location" id="location" />
 </fieldset>
 
+<fieldset id="start">
+<label class="startend">
+Start:
+</label>
+<fieldset class="onerow">
+<div class="inline-block">
+<label for="start_date">date: </label>
+<input type="date" name="start_date" id="start_date"/>
+</div>
+<div class="inline-block">
+<label for="start_date">time: </label>
+<input type="time" name="start_time" id="start_time"/>
+</div>
+</fieldset>
+</fieldset>
+
+<fieldset id="end">
+<label class="startend">
+End:
+</label>
+<fieldset class="onerow">
+<div class="inline-block">
+<label for="start_date">date: </label>
+<input type="date" name="end_date" id="end_date"/>
+</div>
+<div class="inline-block">
+<label for="start_date">time: </label>
+<input type="time" name="end_time" id="end_time"/>
+</div>
+</fieldset>
+</fieldset>
+
+
 <fieldset>
 <label for="location">Other Info:</label>
 <textarea name="info" id="info"></textarea>
 </fieldset>
 
-</fieldset>
 <fieldset id="submit">
-<input type="submit" value="Get Link &raquo;" />
+<input type="submit" id="submit" value="Get Link &raquo;" />
+</fieldset>
+
+
 </fieldset>
 </form>
+
+<div id="result">
+</div>
 
 {% endblock %}
 

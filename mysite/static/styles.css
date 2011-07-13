@@ -22,10 +22,56 @@ h1 a:hover{
 
 form#event-info-form{
     background-color: #ededed;
-
+    padding: 10px;
+    border-radius: 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    width: 350px;
+    margin: auto;
+    text-align: center;
 }
 form#event-info-form fieldset{
     border: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    width: auto;
+    margin: auto;
+}
+
+label{
+    vertical-align: top;
+    color: gray;
+    font-size: .8em;
+    display: block;
+}
+label.startend{
+    color: black;
+    font-size: 1em;
+}
+
+.inline-block input{
+    width: 80px;
+}
+
+input{
+    width: 200px;
+}
+
+textarea{
+    width: 300px;
+    height: 50px;
+}
+
+fieldset.onerow{
+    display: block;
+}
+
+.inline-block{
+    display: inline-block;
+}
+
+#end_date, #start_date{
 }
 
 
