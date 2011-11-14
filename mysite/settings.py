@@ -11,7 +11,7 @@ ADMINS = (
 
 # path to here, including the mysite dir at the end.
 # include trailing slash
-ABS_PATH_TO_THIS_REPO = '/home/pphinney/workspace/calendar_item/mysite/'
+ABS_PATH_TO_THIS_REPO = '/home/pyrak/workspace/calendar_item/mysite/'
 
 
 STATIC_DOC_ROOT = ABS_PATH_TO_THIS_REPO + 'static/'
@@ -86,5 +86,5 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'mysite.mainapp',
-    'mysite.urlgen',
+    #'mysite.urlgen',
 )

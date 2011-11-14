@@ -24,8 +24,9 @@ $(function(){
                 $('#result').show();
                 $('#result').append(data);
             },
-            error: function(){
-                alert('aw, crud. an error.');
+            error: function(e){
+                console.log(e);
+                alert('aw, crud. an error.' + e);
             },
         });
         return false;
