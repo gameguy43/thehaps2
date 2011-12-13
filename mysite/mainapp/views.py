@@ -17,38 +17,43 @@ def main(request):
     return render_to_response('index.html', data)
 
 def ajax_add_event(request):
-    '''
-    name =  models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    info = models.CharField(max_length=100)
-    start_datetime = models.DateTimeField()
-    end_datetime = models.DateTimeField()
-    '''
+    post_data = simplejson.loads(request.raw_post_data)
+    post_data = map(lambda d: (d['name'], d['value']), post_data)
+    post_data = dict(post_data)
+
     # parsing the input dates and times
-    start_date = request.POST.get('start_date', None) 
-    start_time = request.POST.get('start_time', None) 
-    end_date = request.POST.get('end_date', None) 
-    end_time = request.POST.get('end_time', None) 
+    utc_offset = post_data.get('utc_offset', 0) 
+    start_date = post_data.get('start_date', None) 
+    start_time = post_data.get('start_time', None) 
+    end_date = post_data.get('end_date', None) 
+    end_time = post_data.get('end_time', None) 
+    # error out if we didn't get them
     if not (start_date and start_time and end_date and end_time):
         print "didn't get the stuff that we wanted"
+        return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t find the time parameters'}), status=400)
+
+
         return False
     start_date_m, start_date_d, start_date_y = map(int, start_date.split('/'))
     end_date_m, end_date_d, end_date_y = map(int, end_date.split('/'))
     start_time_h, start_time_m = map(int, start_time.split(':'))
     end_time_h, end_time_m = map(int, end_time.split(':'))
     start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m)
+    start_datetime = start_datetime + datetime.timedelta(minutes=utc_offset)
     end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m)
+    end_datetime = end_datetime + datetime.timedelta(minutes=utc_offset)
 
     c = CalendarItem()
-    c.name = request.POST.get('title', '')
-    c.location = request.POST.get('location', '')
-    c.info = request.POST.get('info', '')
+    c.name = post_data.get('title', '')
+    c.location = post_data.get('location', '')
+    c.info = post_data.get('info', '')
     c.start_datetime = start_datetime
     c.end_datetime  = end_datetime
     c.save()
 
-    response = google_url_from_calendaritem_dict(c.__dict__)
-    return HttpResponse(response, mimetype='text/html')
+    gcal_url = google_url_from_calendaritem_dict(c.__dict__)
+    return_dict = {'google_url': gcal_url}
+    return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 
 def query_str_from_dict(values):
     partial = values.items()

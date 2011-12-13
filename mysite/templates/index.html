@@ -15,15 +15,26 @@ $(function(){
     $('#end_date').datepicker(datepicker_options);
     $('#start_time').timepicker(timepicker_options);
     $('#end_time').timepicker(timepicker_options);
+
     $('#submit').click(function(){
+        data = $('#event-info-form').serializeArray();
+        timezone = jstz.determine_timezone();
+        timezone_name = timezone.name();
+        data.push({'name':'timezone', 'value': timezone_name});
+        console.log(data);
+        data = JSON.stringify(data);
+        console.log(data);
         $.ajax({
             type: 'POST',
+            dataType: 'json',
             url: '/ajax_add_event',
-            data: $('#event-info-form').serialize(),
+            data: data,
             success: function(data){
+                console.log(data);
+                url = data['google_url'];
                 $('#result').show();
                 $('#result').empty();
-                $('#result').append(data);
+                $('#result').append(url);
             },
             error: function(e){
                 console.log(e);
