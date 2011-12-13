@@ -58,28 +58,17 @@ def query_str_from_dict(values):
     return partial
     
 def google_url_from_calendaritem_dict(calitem_dict):
-    google_dates = '1' #TODO
+    '''docs: http://www.google.com/googlecalendar/event_publisher_guide_detail.html'''
+    dt_format = '%Y%m%dT%H%M00Z'
+    google_dates = '/'.join(map(lambda dt: dt.strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
     google_query_str = {
         'action' : 'TEMPLATE',
         'text' : calitem_dict.get('name', ''),
         'dates' : google_dates,
         'details' : calitem_dict.get('info', ''),
         'location' : calitem_dict.get('location', ''),
-        'trp' : 'false',
         }
 
-    '''
-    action=TEMPLATE
-    text=My%20sweet%20event
-    dates=20110710T070000Z/20060101T080000Z
-    details=hiiiii
-    location=here
-    trp=false
-    sprop=http%3A%2F%2Fmadebyparker.com
-    sprop=name:Parker%20Phinney
-
-    http://www.google.com/calendar/event?action=TEMPLATE&text=My%20sweet%20event&dates=20110710T070000Z/20060101T080000Z&details=hiiiii&location=here&trp=false&sprop=http%3A%2F%2Fmadebyparker.com&sprop=name:Parker%20Phinney
-    '''
     google_url_base = 'http://www.google.com/calendar/event?'
     google_query_str = query_str_from_dict(google_query_str)
     google_url = ''.join([google_url_base, google_query_str])
