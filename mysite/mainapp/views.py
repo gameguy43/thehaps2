@@ -47,7 +47,6 @@ def ajax_add_event(request):
     c.end_datetime  = end_datetime
     c.save()
 
-    import ipdb; ipdb.set_trace()
     response = google_url_from_calendaritem_dict(c.__dict__)
     return HttpResponse(response, mimetype='text/html')
 
