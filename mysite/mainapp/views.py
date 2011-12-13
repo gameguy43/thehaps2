@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
+import pytz
 
 from mysite.mainapp.models import CalendarItem
 
@@ -22,7 +23,8 @@ def ajax_add_event(request):
     post_data = dict(post_data)
 
     # parsing the input dates and times
-    utc_offset = post_data.get('utc_offset', 0) 
+    tz = post_data.get('timezone', None) 
+    tz = pytz.timezone(tz)
     start_date = post_data.get('start_date', None) 
     start_time = post_data.get('start_time', None) 
     end_date = post_data.get('end_date', None) 
@@ -38,10 +40,8 @@ def ajax_add_event(request):
     end_date_m, end_date_d, end_date_y = map(int, end_date.split('/'))
     start_time_h, start_time_m = map(int, start_time.split(':'))
     end_time_h, end_time_m = map(int, end_time.split(':'))
-    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m)
-    start_datetime = start_datetime + datetime.timedelta(minutes=utc_offset)
-    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m)
-    end_datetime = end_datetime + datetime.timedelta(minutes=utc_offset)
+    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz)
+    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz)
 
     c = CalendarItem()
     c.name = post_data.get('title', '')
@@ -65,7 +65,7 @@ def query_str_from_dict(values):
 def google_url_from_calendaritem_dict(calitem_dict):
     '''docs: http://www.google.com/googlecalendar/event_publisher_guide_detail.html'''
     dt_format = '%Y%m%dT%H%M00Z'
-    google_dates = '/'.join(map(lambda dt: dt.strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
+    google_dates = '/'.join(map(lambda dt: dt.astimezone(pytz.utc).strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
     google_query_str = {
         'action' : 'TEMPLATE',
         'text' : calitem_dict.get('name', ''),
