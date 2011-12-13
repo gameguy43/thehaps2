@@ -22,6 +22,7 @@ $(function(){
             data: $('#event-info-form').serialize(),
             success: function(data){
                 $('#result').show();
+                $('#result').empty();
                 $('#result').append(data);
             },
             error: function(e){
@@ -33,18 +34,16 @@ $(function(){
     });
     // grab the current time/date and set it as the defaults
     now = new Date();
-    h = now.getHours();
-    m = now.getMinutes();
-    time = h + ':' + m;
-    d = now.getDate();
-    m = now.getMonth();
-    y = now.getFullYear();
-    date = m + '/' + d + '/' + y;
+    in_one_hour = new Date(now.getTime() + (1000*60*60));
+    time = now.getHours() + ':' + now.getMinutes();
+    time_in_one_hour = in_one_hour.getHours() + ':' + in_one_hour.getMinutes();
+    date = now.getMonth() + '/' + now.getDate() + '/' + now.getFullYear();
+    date_in_one_hour = in_one_hour.getMonth() + '/' + in_one_hour.getDate() + '/' + in_one_hour.getFullYear();
 
     $('#start_date').val(date);
-    $('#end_date').val(date);
+    $('#end_date').val(date_in_one_hour);
     $('#start_time').val(time);
-    $('#end_time').val(time);
+    $('#end_time').val(time_in_one_hour);
 });
 
 </script>
