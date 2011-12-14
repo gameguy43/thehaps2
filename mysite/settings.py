@@ -1,4 +1,5 @@
 # Django settings for mysite project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,7 +12,7 @@ ADMINS = (
 
 # path to here, including the mysite dir at the end.
 # include trailing slash
-ABS_PATH_TO_THIS_REPO = '/home/pyrak/workspace/calendar_item/mysite/'
+ABS_PATH_TO_THIS_REPO = os.path.dirname(os.path.realpath(__file__))
 
 
 STATIC_DOC_ROOT = ABS_PATH_TO_THIS_REPO + 'static/'
@@ -77,7 +78,6 @@ ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATE_DIRS = (
     ABS_PATH_TO_THIS_REPO + 'templates',
-
 )
 
 INSTALLED_APPS = (
