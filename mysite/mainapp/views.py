@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
 import pytz
+import hashlib
 
 from mysite.mainapp.models import CalendarItem
 
@@ -50,10 +51,19 @@ def ajax_add_event(request):
     c.start_datetime = start_datetime
     c.end_datetime  = end_datetime
     c.save()
+    #TODO: handle collisions
+        # what error will it throw? catch that
+    c.slug = generate_hash(c.uid)
+    c.save()
 
     gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     return_dict = {'google_url': gcal_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
+
+def generate_hash(salt):
+    h = hashlib.md5()
+    h.update(salt)
+    return h.hexdigest()
 
 def query_str_from_dict(values):
     partial = values.items()

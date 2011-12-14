@@ -8,3 +8,4 @@ class CalendarItem(models.Model):
     info = models.CharField(max_length=100)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    slug = models.SlugField(max_length=50, unique=True, null=True)
