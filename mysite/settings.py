@@ -12,7 +12,7 @@ ADMINS = (
 
 # path to here, including the mysite dir at the end.
 # include trailing slash
-ABS_PATH_TO_THIS_REPO = os.path.dirname(os.path.realpath(__file__))
+ABS_PATH_TO_THIS_REPO = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 
 STATIC_DOC_ROOT = ABS_PATH_TO_THIS_REPO + 'static/'
