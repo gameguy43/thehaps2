@@ -22,4 +22,6 @@ urlpatterns = patterns('',
         {'document_root': settings.STATIC_DOC_ROOT, 'show_indexes': True}),
     (r'^images/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT + 'images/', 'show_indexes': True}),
+
+    (r'^(?P<slug>\w+)$', 'mysite.mainapp.views.to_gcal'),
 )

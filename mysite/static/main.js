@@ -27,7 +27,7 @@ $(function(){
             data: data,
             success: function(data){
                 console.log(data);
-                url = data['google_url'];
+                url = data['our_url'];
                 $('#result').show();
                 $('#result').empty();
                 box = $('<textarea></textarea>')

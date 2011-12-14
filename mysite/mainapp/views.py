@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
+from django.contrib.sites.models import Site
 import pytz
 import hashlib
 
@@ -13,6 +14,13 @@ import datetime
 
 
 
+def to_gcal(request, slug):
+    print slug
+    #get the calendar item
+    c = CalendarItem.objects.get(slug=slug)
+    #get the gcal url
+    gcal_url = google_url_from_calendaritem_dict(c.__dict__)
+    return HttpResponseRedirect(gcal_url)
 
 def main(request):
     data = {}
@@ -41,8 +49,9 @@ def ajax_add_event(request):
     end_date_m, end_date_d, end_date_y = map(int, end_date.split('/'))
     start_time_h, start_time_m = map(int, start_time.split(':'))
     end_time_h, end_time_m = map(int, end_time.split(':'))
-    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz)
-    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz)
+    # note that we make these UTC at the last minute
+    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz).astimezone(pytz.utc)
+    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz).astimezone(pytz.utc)
 
     c = CalendarItem()
     c.name = post_data.get('title', '')
@@ -53,17 +62,19 @@ def ajax_add_event(request):
     c.save()
     #TODO: handle collisions
         # what error will it throw? catch that
-    c.slug = generate_hash(c.uid)
+    c.slug = generate_hash(c.id)
     c.save()
 
-    gcal_url = google_url_from_calendaritem_dict(c.__dict__)
-    return_dict = {'google_url': gcal_url}
+    #gcal_url = google_url_from_calendaritem_dict(c.__dict__)
+    our_url = current_site_url() + '/' + c.slug
+    return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 
 def generate_hash(salt):
+    salt = str(salt)
     h = hashlib.md5()
     h.update(salt)
-    return h.hexdigest()
+    return h.hexdigest()[:5]
 
 def query_str_from_dict(values):
     partial = values.items()
@@ -75,7 +86,7 @@ def query_str_from_dict(values):
 def google_url_from_calendaritem_dict(calitem_dict):
     '''docs: http://www.google.com/googlecalendar/event_publisher_guide_detail.html'''
     dt_format = '%Y%m%dT%H%M00Z'
-    google_dates = '/'.join(map(lambda dt: dt.astimezone(pytz.utc).strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
+    google_dates = '/'.join(map(lambda dt: dt.strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
     google_query_str = {
         'action' : 'TEMPLATE',
         'text' : calitem_dict.get('name', ''),
@@ -88,3 +99,15 @@ def google_url_from_calendaritem_dict(calitem_dict):
     google_query_str = query_str_from_dict(google_query_str)
     google_url = ''.join([google_url_base, google_query_str])
     return google_url
+
+def current_site_url():
+    """Returns fully qualified URL (no trailing slash) for the current site."""
+    current_site = Site.objects.get_current()
+    #protocol = getattr(settings, 'MY_SITE_PROTOCOL', 'http')
+    protocol = 'http'
+    #port = getattr(settings, 'MY_SITE_PORT', '')
+    port = '8000'
+    url = '%s://%s' % (protocol, current_site.domain)
+    if port:
+        url += ':%s' % port
+    return url
