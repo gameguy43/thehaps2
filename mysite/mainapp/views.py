@@ -106,8 +106,5 @@ def current_site_url():
     #protocol = getattr(settings, 'MY_SITE_PROTOCOL', 'http')
     protocol = 'http'
     #port = getattr(settings, 'MY_SITE_PORT', '')
-    port = '8000'
     url = '%s://%s' % (protocol, current_site.domain)
-    if port:
-        url += ':%s' % port
     return url
