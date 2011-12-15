@@ -52,7 +52,9 @@ def ajax_add_event(request):
     print start_datetime
     start_datetime = start_datetime.astimezone(pytz.utc)
     print start_datetime
-    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz).astimezone(pytz.utc)
+    start_datetime = start_datetime.replace(tzinfo=None)
+    print start_datetime
+    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz).astimezone(pytz.utc).replace(tzinfo=None)
 
     c = CalendarItem()
     c.name = post_data.get('title', '')
