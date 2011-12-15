@@ -42,15 +42,15 @@ def ajax_add_event(request):
     if not (start_date and start_time and end_date and end_time):
         print "didn't get the stuff that we wanted"
         return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t find the time parameters'}), status=400)
-
-
-        return False
     start_date_m, start_date_d, start_date_y = map(int, start_date.split('/'))
     end_date_m, end_date_d, end_date_y = map(int, end_date.split('/'))
     start_time_h, start_time_m = map(int, start_time.split(':'))
     end_time_h, end_time_m = map(int, end_time.split(':'))
     # note that we make these UTC at the last minute
-    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz).astimezone(pytz.utc)
+    start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz)
+    print start_datetime
+    start_datetime = start_datetime.astimezone(pytz.utc)
+    print start_datetime
     end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz).astimezone(pytz.utc)
 
     c = CalendarItem()
