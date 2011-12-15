@@ -15,10 +15,8 @@ import datetime
 
 
 def to_gcal(request, slug):
-    print slug
     #get the calendar item
     c = CalendarItem.objects.get(slug=slug)
-    print c.start_datetime
     #get the gcal url
     gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     return HttpResponseRedirect(gcal_url)
@@ -47,15 +45,14 @@ def ajax_add_event(request):
     end_date_m, end_date_d, end_date_y = map(int, end_date.split('/'))
     start_time_h, start_time_m = map(int, start_time.split(':'))
     end_time_h, end_time_m = map(int, end_time.split(':'))
-    # note that we make these UTC at the last minute
     start_datetime = datetime.datetime(start_date_y, start_date_m, start_date_d, start_time_h, start_time_m, tzinfo=tz)
-    print start_datetime
-    start_datetime = start_datetime.astimezone(pytz.utc)
-    print start_datetime
-    start_datetime = start_datetime.replace(tzinfo=None)
-    print start_datetime
-    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz).astimezone(pytz.utc).replace(tzinfo=None)
+    end_datetime = datetime.datetime(end_date_y, end_date_m, end_date_d, end_time_h, end_time_m, tzinfo=tz)
 
+    # convert to utc and then naiveify
+    # note: we need to naive-ify or else heroku will aggressively try to convert to another timezone at insertion time
+    start_datetime, end_datetime = map(lambda dt: dt.astimezone(pytz.utc).replace(tzinfo=None), [start_datetime, end_datetime])
+
+    # make the calendaritem
     c = CalendarItem()
     c.name = post_data.get('title', '')
     c.location = post_data.get('location', '')
@@ -67,7 +64,6 @@ def ajax_add_event(request):
         # what error will it throw? catch that
     c.slug = generate_hash(c.id)
     c.save()
-    print c.start_datetime
 
     #gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     our_url = current_site_url() + '/' + c.slug
