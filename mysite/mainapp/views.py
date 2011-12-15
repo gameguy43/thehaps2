@@ -18,6 +18,7 @@ def to_gcal(request, slug):
     print slug
     #get the calendar item
     c = CalendarItem.objects.get(slug=slug)
+    print c.start_datetime
     #get the gcal url
     gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     return HttpResponseRedirect(gcal_url)
@@ -64,6 +65,7 @@ def ajax_add_event(request):
         # what error will it throw? catch that
     c.slug = generate_hash(c.id)
     c.save()
+    print c.start_datetime
 
     #gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     our_url = current_site_url() + '/' + c.slug
