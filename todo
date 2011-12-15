@@ -1,3 +1,5 @@
+* bug where the time is wrong on the live heroku instance
+* more helpful copy on the page
 * bug where a line break in the description breaks the ajax
-* move the whole thing to a better domain
-* make it look good.
+* date/time of END gets set to an hour after date./time of START when START is set to be after END
+* copy to clipboard button
