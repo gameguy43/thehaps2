@@ -1,0 +1,3 @@
+* bug where a line break in the description breaks the ajax
+* move the whole thing to a better domain
+* make it look good.
