@@ -1,4 +1,3 @@
-* handle slug collisions
 * bug where a line break in the description breaks the ajax
 * more helpful copy on the page
 * date/time of END gets set to an hour after date./time of START when START is set to be after END
