@@ -5,8 +5,10 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
 from django.contrib.sites.models import Site
+from django.db import IntegrityError
 import pytz
 import hashlib
+import os
 
 from mysite.mainapp.models import CalendarItem
 
@@ -59,21 +61,37 @@ def ajax_add_event(request):
     c.info = post_data.get('info', '')
     c.start_datetime = start_datetime
     c.end_datetime  = end_datetime
-    c.save()
-    #TODO: handle collisions
-        # what error will it throw? catch that
-    c.slug = generate_hash(c.id)
-    c.save()
+
+    tries_left = 3
+    while tries_left >= 0:
+        tries_left-=1
+        c.slug = generate_hash(c.id)
+        try:
+            c.save()
+            break
+        except IntegrityError:
+            print "slug collision. re-rolling..."
+            continue
+        except:
+            print "trouble putting the calendar item in the database"
+            return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t put calendar item in the database'}), status=400)
+    #if we tried X times and didn't get a slug that we could use...
+    if tries_left <0:
+        print "rolled X times and couldn't get a good slug"
+        return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t get a good slug after X rolls'}), status=400)
 
     #gcal_url = google_url_from_calendaritem_dict(c.__dict__)
     our_url = current_site_url() + '/' + c.slug
     return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 
-def generate_hash(salt):
-    salt = str(salt)
+def generate_hash(x):
+    x = str(x)
+    # insert some randomness so that we can "re-roll" our slugs
+    salt = os.urandom(3)
+    x+= salt
     h = hashlib.md5()
-    h.update(salt)
+    h.update(x)
     return h.hexdigest()[:5]
 
 def query_str_from_dict(values):
