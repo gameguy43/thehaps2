@@ -28,9 +28,16 @@ def main(request):
     return render_to_response('index.html', data)
 
 def ajax_add_event(request):
-    post_data = simplejson.loads(request.raw_post_data)
+    #decoding the inputted JSON blob
+    json_data = request.POST['data_as_json']
+    #escape newlines because they break the JSON parser
+    json_data = '\\n'.join(json_data.splitlines())
+    print json_data #DEBUG
+    post_data = simplejson.loads(json_data)
     post_data = map(lambda d: (d['name'], d['value']), post_data)
     post_data = dict(post_data)
+    #put the newlines back
+    post_data['info'] = post_data['info'].replace('\\n', '\n')
 
     # parsing the input dates and times
     tz = post_data.get('timezone', None) 

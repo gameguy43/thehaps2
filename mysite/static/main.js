@@ -24,7 +24,7 @@ $(function(){
             type: 'POST',
             dataType: 'json',
             url: '/ajax_add_event',
-            data: data,
+            data: {'data_as_json': data},
             success: function(data){
                 console.log(data);
                 url = data['our_url'];
