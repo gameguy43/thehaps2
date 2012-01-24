@@ -27,17 +27,28 @@ def main(request):
     data = {}
     return render_to_response('index.html', data)
 
+def json_str_to_dict(json_str):
+    def strip_newlines_from_str(string):
+        return '\\n'.join(string.splitlines())
+    def return_newlines(string):
+        return string.replace('\\n', '\n')
+    #escape newlines because they break the JSON parser
+    json_str = strip_newlines_from_str(json_str)
+    json_data = simplejson.loads(json_str)
+    json_data = dict([(d['name'], return_newlines(d['value']))
+                 for d in json_data])
+    return json_data
+
+def ajax_add_email(request):
+    #decoding the inputted JSON blob
+    json_data = request.POST['data_as_json']
+    json_data = json_str_to_dict(json_data)
+    # TODO
+
 def ajax_add_event(request):
     #decoding the inputted JSON blob
     json_data = request.POST['data_as_json']
-    #escape newlines because they break the JSON parser
-    json_data = '\\n'.join(json_data.splitlines())
-    print json_data #DEBUG
-    post_data = simplejson.loads(json_data)
-    post_data = map(lambda d: (d['name'], d['value']), post_data)
-    post_data = dict(post_data)
-    #put the newlines back
-    post_data['info'] = post_data['info'].replace('\\n', '\n')
+    post_data = json_str_to_dict(json_data)
 
     # parsing the input dates and times
     tz = post_data.get('timezone', None) 

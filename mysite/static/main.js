@@ -46,8 +46,8 @@ $(function(){
     in_one_hour = new Date(now.getTime() + (1000*60*60));
     time = now.getHours() + ':' + now.getMinutes();
     time_in_one_hour = in_one_hour.getHours() + ':' + in_one_hour.getMinutes();
-    date = now.getMonth() + '/' + now.getDate() + '/' + now.getFullYear();
-    date_in_one_hour = in_one_hour.getMonth() + '/' + in_one_hour.getDate() + '/' + in_one_hour.getFullYear();
+    date = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
+    date_in_one_hour = (in_one_hour.getMonth() + 1) + '/' + in_one_hour.getDate() + '/' + in_one_hour.getFullYear();
 
     $('#start_date').val(date);
     $('#end_date').val(date_in_one_hour);
