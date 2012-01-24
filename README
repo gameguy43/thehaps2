@@ -2,3 +2,19 @@ by Parker Phinney
 parker.phinney@gmail.com
 http://madebyparker.com
 licensed under the GNU AGPL.
+
+useful info on heroku and venv here:
+http://devcenter.heroku.com/articles/django
+
+first time:
+$ sudo apt-get install libpq-dev python-dev
+$ pip install Django psycopg2
+$ virtualenv --no-site-packages venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ cd mysite
+$ python manage.py syncdb
+$ python manage.py migrate
+
+every time:
+$ source venv/bin/activate

@@ -6,7 +6,8 @@ class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields
     subject = models.CharField(max_length=1000)
     body = models.TextField()
-    from = models.CharField(max_length=100)
+    # note: odd name below because from is a special word
+    from_field = models.CharField(max_length=100)
     to = models.CharField(max_length=1000)
     cc = models.CharField(max_length=1000)
     date = models.DateTimeField()
