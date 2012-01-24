@@ -44,6 +44,17 @@ def ajax_add_email(request):
     json_data = request.POST['data_as_json']
     json_data = json_str_to_dict(json_data)
     # TODO
+    # parse out all the email fields
+    # do we already have this email?
+    # case: we already have this email
+        # grab the event from the database
+    # case: this email is new to the system
+        # store this email in the database
+        # come up with our best guess parse of the event info
+        # create a new event for it and put it in the database
+    # add the event to their event list
+    # send confirmation email with the event info (inviting them to modify)
+
 
 def ajax_add_event(request):
     #decoding the inputted JSON blob
