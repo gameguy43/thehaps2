@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 
     (r'^$', 'mysite.mainapp.views.main'),
     (r'^ajax_add_event$', 'mysite.mainapp.views.ajax_add_event'),
+    (r'^add/email$', 'mysite.mainapp.views.add_email_do'),
 
     # to allow static files to be served by django (band-aid for now)
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',

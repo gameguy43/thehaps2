@@ -9,7 +9,7 @@ class Email(models.Model):
     # note: odd name below because from is a special word
     from_field = models.CharField(max_length=100)
     to = models.CharField(max_length=1000)
-    cc = models.CharField(max_length=1000)
+    cc = models.CharField(max_length=1000, null=True, default="")
     date = models.DateTimeField()
 
 class CalendarItem(models.Model):

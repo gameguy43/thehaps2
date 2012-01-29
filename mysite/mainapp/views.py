@@ -6,13 +6,17 @@ from django.core import serializers
 from django.utils import simplejson
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
-import pytz
-import hashlib
-import os
 
 from mysite.mainapp.models import CalendarItem
+from mysite.mainapp.models import Email
 
+import os
+import StringIO
+import pytz
+import hashlib
 import datetime
+from email.parser import Parser as emailParser
+
 
 
 
@@ -39,12 +43,39 @@ def json_str_to_dict(json_str):
                  for d in json_data])
     return json_data
 
-def ajax_add_email(request):
-    #decoding the inputted JSON blob
-    json_data = request.POST['data_as_json']
-    json_data = json_str_to_dict(json_data)
-    # TODO
-    # parse out all the email fields
+def add_email_do(request):
+    # grab the email from post
+    email_as_str = request.POST['email_str']
+    # parse it into an email object
+    # shove the unicode email string into a stringio before parsing
+    # this is madness. why???
+    # because email.parser chokes on unicode. i don't know why.
+    # maybe some day we'll be able to do this:
+    #parsed_email = emailParser().parsestr(email_as_str)
+    # until then:
+    parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
+    if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
+        print "error parsing email"
+        return HttpResponse("")
+    if not parsed_email['From'] or not parsed_email['To']:
+        print "email missing crucial field"
+        return HttpResponse("")
+    e = Email()
+    email_obj_field_to_model_field_mappings = {
+        'To' : 'to',
+        'From' : 'from_field',
+        'Cc' : 'cc',
+        'Subject' : 'subject',
+        #TODO: date
+        #'Date' : 'date',
+    }
+    e.body = parsed_email.get_payload().strip()
+    for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
+      setattr(e, model_field, parsed_email[email_field])
+    e.save()
+    return HttpResponse("1")
+
+    # TODO:
     # do we already have this email?
     # case: we already have this email
         # grab the event from the database
