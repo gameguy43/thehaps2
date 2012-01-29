@@ -1,3 +1,10 @@
+install email_handler.py to hacktown (check out the code, procmailrc, install postfix and maybe other things)
+    maybe make a helpful bash script to replicate the steps
+write view to receive plaintext emails over POST and add them to the database
+    write a test function that uses a test email. maybe just test drive.
+tie these two pieces together
+
+
 original calendaritem.com todos
 * bug where a line break in the description breaks the ajax
 * more helpful copy on the page
