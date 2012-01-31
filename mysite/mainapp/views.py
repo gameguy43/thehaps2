@@ -16,6 +16,7 @@ import pytz
 import hashlib
 import datetime
 from email.parser import Parser as emailParser
+import rfc822
 
 
 
@@ -73,7 +74,7 @@ def add_email_do(request):
         'X-Mailer' : 'x_mailer',
         'Message-Id' : 'message_id',
         }
-    e.date = parsed_email['Date']
+    e.date = datetime.datetime(*rfc822.parsedate_tz(parsed_email['Date'])[:6])
     e.body = parsed_email.get_payload().strip()
     for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
       setattr(e, model_field, parsed_email[email_field])
