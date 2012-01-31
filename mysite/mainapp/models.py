@@ -17,6 +17,10 @@ class Email(models.Model):
     received =  models.CharField(max_length=1000, null=True, default="")
     x_mailer =  models.CharField(max_length=1000, null=True, default="")
     message_id =  models.CharField(max_length=1000, null=True, default="")
+
+    def from_email(self):
+        return self.from_field.split(' ')[0]
+        
 '''
 Return-Path
 X-Original-To

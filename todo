@@ -1,6 +1,9 @@
+* develop a notion of accounts
+* things in the comments of the add_email_do view
+
+later:
 * make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
 * figure out how to get an initial parse from an email
-* other things in the comments of the add_email_do view
 
 
 original calendaritem.com todos

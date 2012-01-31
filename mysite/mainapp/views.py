@@ -9,6 +9,7 @@ from django.db import IntegrityError
 
 from mysite.mainapp.models import CalendarItem
 from mysite.mainapp.models import Email
+from django.contrib.auth.models import User
 
 import os
 import StringIO
@@ -43,6 +44,14 @@ def json_str_to_dict(json_str):
     json_data = dict([(d['name'], return_newlines(d['value']))
                  for d in json_data])
     return json_data
+
+def get_user_by_email(email):
+    user = None
+    try:
+        user = User.objects.get(email=email)
+    except:
+        pass
+    return user
 
 def add_email_do(request):
     # grab the email from post
@@ -79,7 +88,18 @@ def add_email_do(request):
     for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
       setattr(e, model_field, parsed_email[email_field])
     e.save()
-    return HttpResponse("1")
+
+    # who sent this email?
+    user = get_user_by_email(e.from_email())
+    # case: we have an account for the person who sent this email
+    if user:
+        print "we know the user"
+        pass
+    # case: we don't have an account for the person who sent this email
+    else:
+        print "we dont know the user"
+        pass
+        # TODO: send them an email saying so?
 
     # TODO:
     # do we already have this email?
@@ -91,6 +111,9 @@ def add_email_do(request):
         # create a new event for it and put it in the database
     # add the event to their event list
     # send confirmation email with the event info (inviting them to modify)
+    return HttpResponse("1")
+
+
 
 
 def ajax_add_event(request):
