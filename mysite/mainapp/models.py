@@ -11,6 +11,26 @@ class Email(models.Model):
     to = models.CharField(max_length=1000)
     cc = models.CharField(max_length=1000, null=True, default="")
     date = models.DateTimeField()
+    return_path = models.CharField(max_length=1000, null=True, default="")
+    x_original_to = models.CharField(max_length=1000, null=True, default="")
+    delivered_to =  models.CharField(max_length=1000, null=True, default="")
+    received =  models.CharField(max_length=1000, null=True, default="")
+    x_mailer =  models.CharField(max_length=1000, null=True, default="")
+    message_id =  models.CharField(max_length=1000, null=True, default="")
+'''
+Return-Path
+X-Original-To
+Delivered-To
+Received
+X-Mailer
+Message-Id
+Date
+From
+Subject
+To
+'''
+
+
 
 class CalendarItem(models.Model):
     name =  models.CharField(max_length=100)
