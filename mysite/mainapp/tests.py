@@ -31,11 +31,3 @@ class EmailTest(TestCase):
         c.post('/add/email', data)
         e = Email.objects.get(subject=the_subject)
         self.failUnlessEqual(e.body, the_body)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
-
