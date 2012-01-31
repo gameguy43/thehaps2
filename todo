@@ -1,8 +1,6 @@
-install email_handler.py to hacktown (check out the code, procmailrc, install postfix and maybe other things)
-    maybe make a helpful bash script to replicate the steps
-write view to receive plaintext emails over POST and add them to the database
-    write a test function that uses a test email. maybe just test drive.
-tie these two pieces together
+* make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
+* figure out how to get an initial parse from an email
+* other things in the comments of the add_email_do view
 
 
 original calendaritem.com todos
