@@ -80,18 +80,23 @@ def add_email_do(request):
     for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
       setattr(e, model_field, parsed_email[email_field])
 
-    # who sent this email?
+    # get or create the user who sent this email
     e.user, created = User.objects.get_or_create(email=e.from_email())
     e.save()
 
     # TODO:
+    same_emails = e.get_same_emails()
     # do we already have this email?
     # case: we already have this email
+    if same_emails:
         # grab the event from the database
+        c = same_emails[0].calendar_item
+        pass
     # case: this email is new to the system
-        # store this email in the database
+    else:
         # come up with our best guess parse of the event info
-        # create a new event for it and put it in the database
+        # also, create a new event for it and put it in the database
+        c = e.create_auto_parse_calendar_item()
     # add the event to their event list
     # send confirmation email with the event info (inviting them to modify)
     return HttpResponse("1")

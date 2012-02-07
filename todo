@@ -1,9 +1,7 @@
-* create migration for my new changes to the database
-* things in the comments of the add_email_do view
-
-later:
-* make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
 * figure out how to get an initial parse from an email
+* make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
+
+* make it so that a user can have multiple email addresses
 
 
 original calendaritem.com todos
