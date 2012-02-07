@@ -45,14 +45,6 @@ def json_str_to_dict(json_str):
                  for d in json_data])
     return json_data
 
-def get_user_by_email(email):
-    user = None
-    try:
-        user = User.objects.get(email=email)
-    except:
-        pass
-    return user
-
 def add_email_do(request):
     # grab the email from post
     email_as_str = request.POST['email_str']
@@ -87,19 +79,10 @@ def add_email_do(request):
     e.body = parsed_email.get_payload().strip()
     for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
       setattr(e, model_field, parsed_email[email_field])
-    e.save()
 
     # who sent this email?
-    user = get_user_by_email(e.from_email())
-    # case: we have an account for the person who sent this email
-    if user:
-        print "we know the user"
-        pass
-    # case: we don't have an account for the person who sent this email
-    else:
-        print "we dont know the user"
-        pass
-        # TODO: send them an email saying so?
+    e.user, created = User.objects.get_or_create(email=e.from_email())
+    e.save()
 
     # TODO:
     # do we already have this email?

@@ -90,3 +90,5 @@ INSTALLED_APPS = (
     'south',
     #'mysite.urlgen',
 )
+
+AUTH_PROFILE_MODULE = 'mainapp.UserProfile'
