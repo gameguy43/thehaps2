@@ -51,7 +51,7 @@ class Email(models.Model):
     def get_same_emails_on_save(sender, instance, created, **kwargs):
         if created:
             same_emails = instance.get_same_emails()
-            instance.same_emails.add(same_emails)
+            instance.same_emails.add(**same_emails)
     post_save.connect(get_same_emails_on_save, sender='Email')
 
     def create_auto_parse_calendar_item(self):

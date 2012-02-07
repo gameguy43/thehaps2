@@ -85,19 +85,19 @@ def add_email_do(request):
     e.save()
 
     # TODO:
-    same_emails = e.get_same_emails()
-    # do we already have this email?
     # case: we already have this email
-    if same_emails:
-        # grab the event from the database
-        c = same_emails[0].calendar_item
-        pass
+    if e.same_emails.exists():
+        # grab the associated event from the database
+        # (just assume that the first same email speaks for them all)
+        c = e.same_emails.all()[:1].calendar_item
     # case: this email is new to the system
     else:
         # come up with our best guess parse of the event info
         # also, create a new event for it and put it in the database
         c = e.create_auto_parse_calendar_item()
     # add the event to their event list
+    e.user.userprofile.calendar.add(c)
+
     # send confirmation email with the event info (inviting them to modify)
     return HttpResponse("1")
 
