@@ -12,12 +12,9 @@ from mysite.mainapp.models import Email
 from django.contrib.auth.models import User
 
 import os
-import StringIO
 import pytz
 import hashlib
 import datetime
-from email.parser import Parser as emailParser
-import rfc822
 
 
 
@@ -48,46 +45,9 @@ def json_str_to_dict(json_str):
 def add_email_do(request):
     # grab the email from post
     email_as_str = request.POST['email_str']
-    # parse it into an email object
-    # shove the unicode email string into a stringio before parsing
-    # this is madness. why???
-    # because email.parser chokes on unicode. i don't know why.
-    # maybe some day we'll be able to do this:
-    #parsed_email = emailParser().parsestr(email_as_str)
-    # until then:
-    parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
-    if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
-        print "error parsing email"
-        return HttpResponse("")
-    if not parsed_email['From'] or not parsed_email['To']:
-        print "email missing crucial field"
-        return HttpResponse("")
-    e = Email()
-    email_obj_field_to_model_field_mappings = {
-        'To' : 'to',
-        'From' : 'from_field',
-        'Cc' : 'cc',
-        'Subject' : 'subject',
-        'Return-Path' : 'return_path',
-        'X-Original-To' : 'x_original_to',
-        'Delivered-To' : 'delivered_to',
-        'Received' : 'received',
-        'X-Mailer' : 'x_mailer',
-        'Message-Id' : 'message_id',
-        }
-    e.date = datetime.datetime(*rfc822.parsedate_tz(parsed_email['Date'])[:6])
-    e.body = parsed_email.get_payload().strip()
-    for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
-      setattr(e, model_field, parsed_email[email_field])
-
-    # get or create the user who sent this email
-    e.user, created = User.objects.get_or_create(email=e.from_email())
-
-    # save the email
-    e.save()
+    e = Email.create_and_save_from_email_str(email_as_str)
 
     # case: we already have this email
-    # TODO: does this work? maybe without re-querying for e we don't get the same_emails field
     if e.same_emails.exists():
         # grab the associated event from the database
         # (just assume that the first same email speaks for them all)
