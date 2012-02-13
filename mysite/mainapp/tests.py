@@ -73,3 +73,12 @@ class EmailTest(TestCase):
             'sender_address': "pyrak@parktop.com",
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
+
+    def test_email_adding_to_db_causes_email_to_user(self)
+        #TODO:
+        # forward an email invite
+        # make sure that we've generated a secret query string var for them to edit the event info
+        # make sure that we've sent the user an email
+        # make sure the email we sent includes the event title
+
+        self.assertTrue(False)
