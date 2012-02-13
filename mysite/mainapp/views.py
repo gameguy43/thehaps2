@@ -60,9 +60,8 @@ def add_email_do(request):
     # add the event to their event list
     e.user.userprofile.calendar.add(c)
 
-    # send confirmation email with the event info (inviting them to modify)
+    # TODO: send confirmation email with the event info (inviting them to modify)
     return HttpResponse("1")
-
 
 
 

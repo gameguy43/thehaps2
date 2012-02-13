@@ -17,15 +17,11 @@ class SimpleTest(TestCase):
         self.failUnlessEqual(1 + 1, 2)
 
 class EmailTest(TestCase):
-    def test_email_adding_to_db(self):
-        # get the test email
-        test_email_filename = 'mainapp/test_data/sample_msg.email'
-        email_str = open(test_email_filename, 'r').read()
-        # hard code the fields to test against
-        # in other words, these are the "expected values"
-        the_subject = 'yo dog'
-        the_body = 'asdfsadf'
-        the_sender_address = "pyrak@parktop.com"
+    def do_test_email_adding_to_db(self, email_str, email_data):
+
+        the_subject = email_data['subject']
+        the_body = email_data['body']
+        the_sender_address = email_data['sender_address']
 
         # send the email to the post handler
         c = Client()
@@ -51,3 +47,29 @@ class EmailTest(TestCase):
         e1, e2 = Email.objects.all()
         self.assertEqual(e1.same_emails.all()[:1][0], e2)
         self.assertEqual(e2.same_emails.all()[:1][0], e1)
+
+    def test_email_adding_to_db_simple(self):
+        # get the test email
+        test_email_filename = 'mainapp/test_data/sample_msg.email'
+        test_email_str = open(test_email_filename, 'r').read()
+        # hard code the fields to test against
+        # in other words, these are the "expected values"
+        test_email_data =  {
+            'subject': 'yo dog',
+            'body': 'asdfsadf',
+            'sender_address': "pyrak@parktop.com",
+            }
+        self.do_test_email_adding_to_db(test_email_str, test_email_data)
+
+    def test_email_adding_to_db_fusion_dance_show(self):
+        # get the test email
+        test_email_filename = 'mainapp/test_data/forwarded_email_fusion_show.email'
+        test_email_str = open(test_email_filename, 'r').read()
+        # hard code the fields to test against
+        # in other words, these are the "expected values"
+        test_email_data =  {
+            'subject': 'yo dog',
+            'body': 'asdfsadf',
+            'sender_address': "pyrak@parktop.com",
+            }
+        self.do_test_email_adding_to_db(test_email_str, test_email_data)
