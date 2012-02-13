@@ -18,17 +18,17 @@ class SimpleTest(TestCase):
 
 class EmailTest(TestCase):
     def test_email_adding_to_db(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        c = Client()
+        # get the test email
         test_email_filename = 'mainapp/test_data/sample_msg.email'
+        email_str = open(test_email_filename, 'r').read()
+        # hard code the fields to test against
+        # in other words, these are the "expected values"
         the_subject = 'yo dog'
         the_body = 'asdfsadf'
         the_sender_address = "pyrak@parktop.com"
 
         # send the email to the post handler
-        email_str = open(test_email_filename, 'r').read()
+        c = Client()
         data = {'email_str': email_str}
         c.post('/add/email', data)
 
@@ -49,7 +49,5 @@ class EmailTest(TestCase):
 
         # test that the two emails in our database know they're the same
         e1, e2 = Email.objects.all()
-        self.assertEqual(e1.same_emails.all(), [e2])
-        self.assertEqual(e2.same_emails.all(), [e1])
-
-
+        self.assertEqual(e1.same_emails.all()[:1][0], e2)
+        self.assertEqual(e2.same_emails.all()[:1][0], e1)

@@ -45,14 +45,8 @@ class Email(models.Model):
         return self.from_field.split(' ')[0]
 
     def get_same_emails(self):
-        #TODO: make this smarter
-        return Email.objects.filter(body=self.body)
+        return Email.objects.filter(body=self.body).exclude(id=self.id)
 
-    def get_same_emails_on_save(sender, instance, created, **kwargs):
-        if created:
-            same_emails = instance.get_same_emails()
-            instance.same_emails.add(**same_emails)
-    post_save.connect(get_same_emails_on_save, sender='Email')
 
     def create_auto_parse_calendar_item(self):
         '''Parse the text of an email and come up with a best guess cal item
@@ -64,4 +58,14 @@ class Email(models.Model):
         c.start_datetime = datetime.datetime.now()
         c.end_datetime = datetime.datetime.now()
         c.save()
+        self.calendar_item = c
+        self.save()
         return c
+
+
+def get_same_emails_on_save(sender, instance, created, **kwargs):
+    if created:
+        same_emails = instance.get_same_emails()
+        for same_email in same_emails.all():
+            instance.same_emails.add(same_email)
+post_save.connect(get_same_emails_on_save, sender=Email)

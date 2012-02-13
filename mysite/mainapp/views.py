@@ -82,14 +82,16 @@ def add_email_do(request):
 
     # get or create the user who sent this email
     e.user, created = User.objects.get_or_create(email=e.from_email())
+
+    # save the email
     e.save()
 
-    # TODO:
     # case: we already have this email
+    # TODO: does this work? maybe without re-querying for e we don't get the same_emails field
     if e.same_emails.exists():
         # grab the associated event from the database
         # (just assume that the first same email speaks for them all)
-        c = e.same_emails.all()[:1].calendar_item
+        c = e.same_emails.all()[:1][0].calendar_item
     # case: this email is new to the system
     else:
         # come up with our best guess parse of the event info
