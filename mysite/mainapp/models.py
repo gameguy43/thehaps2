@@ -22,6 +22,7 @@ class UserProfile(models.Model):
             UserProfile.objects.create(user=instance)
     post_save.connect(create_user_profile, sender=User)
 
+
 class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields
     #PARSED FROM EMAIL:
@@ -38,6 +39,7 @@ class Email(models.Model):
     received =  models.CharField(max_length=1000, null=True, default="")
     x_mailer =  models.CharField(max_length=1000, null=True, default="")
     message_id =  models.CharField(max_length=1000, null=True, default="")
+    thread = models.ForeignKey('EmailThread', related_name="%(app_label)s_%(class)s_related", null=True)
     
     #OTHER FIELDS:
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related", null=True)
@@ -45,22 +47,51 @@ class Email(models.Model):
     same_emails = models.ManyToManyField("self")
 
     @classmethod
-    def create_and_save_from_email_str(cls, email_str):
-        e = cls.create_from_email_str(email_str)
+    def create_and_save_from_thread_str(cls, email_str):
+        e = cls.create_from_thread_str(email_str)
         e.save()
         return e
 
+    def email_message_to_email_obj(email_message):
+        # in: an email.message.Message object
+        # out: a mysite.mainapp.models.Email object
+        # TODO: move most of create_from_thread_str in to here
+        pass
+
     @classmethod
-    def create_from_email_str(cls, email_as_str):
+    def create_from_thread_str(cls, email_as_str):
         # parse it into an email object
-        # shove the unicode email string into a stringio before parsing
+
+        # first: shove the unicode email string into a stringio before parsing
         # this is madness. why???
         # because email.parser chokes on unicode. i don't know why.
         # maybe some day we'll be able to do this:
         #parsed_email = emailParser().parsestr(email_as_str)
         # until then:
-        parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
-        if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
+        message_types = [
+            "text/html",
+            "text/plain"
+            ]
+        outer_types = [
+            'multipart/alternative'
+            ]
+        ignore_types = [
+            ]
+        subject = ''
+        to = ''
+        from_field = ''
+        parsed_email_thread = emailParser().parse(StringIO.StringIO(email_as_str))
+        for message in parsed_email_thread.walk():
+            message_type = message.get_content_type()
+            if message_type in message_types:
+                pass
+                
+
+
+        import ipdb; ipdb.set_trace()
+
+
+        if not parsed_email['From'] and not parsed_email['To']:
             print "error parsing email"
             return HttpResponse("")
         if not parsed_email['From'] or not parsed_email['To']:
@@ -108,6 +139,13 @@ class Email(models.Model):
         self.calendar_item = c
         self.save()
         return c
+
+class EmailThread(models.Model):
+    '''Stores the innermost and outermost emails for quick retrieval
+        but there may be several other emails in the thread.
+        the way we know this is by looking at the thread foreign key in those emails'''
+    innermost = models.ForeignKey(Email, related_name="%(app_label)s_%(class)s_related_innermost", null=True)
+    outermost = models.ForeignKey(Email, related_name="%(app_label)s_%(class)s_related_outermost", null=True)
 
 
 def get_same_emails_on_save(sender, instance, created, **kwargs):

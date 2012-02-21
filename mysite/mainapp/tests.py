@@ -17,7 +17,7 @@ class SimpleTest(TestCase):
         self.failUnlessEqual(1 + 1, 2)
 
 class EmailTest(TestCase):
-    def do_test_email_adding_to_db(self, email_str, email_data):
+    def do_test_thread_adding_to_db(self, email_str, email_data):
 
         the_subject = email_data['subject']
         the_body = email_data['body']
@@ -59,11 +59,11 @@ class EmailTest(TestCase):
             'body': 'asdfsadf',
             'sender_address': "pyrak@parktop.com",
             }
-        self.do_test_email_adding_to_db(test_email_str, test_email_data)
+        self.do_test_thread_adding_to_db(test_email_str, test_email_data)
 
     def test_email_adding_to_db_fusion_dance_show(self):
         # get the test email
-        test_email_filename = 'mainapp/test_data/forwarded_email_fusion_show.email'
+        test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
         test_email_str = open(test_email_filename, 'r').read()
         # hard code the fields to test against
         # in other words, these are the "expected values"
@@ -74,11 +74,20 @@ class EmailTest(TestCase):
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
 
-    def test_email_adding_to_db_causes_email_to_user(self)
+    def test_email_adding_to_db_causes_email_to_user(self):
+        # get the test email--a forwarded invite
+        test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        test_email_str = open(test_email_filename, 'r').read()
+
+        # send the email to the post handler
+        c = Client()
+        data = {'email_str': test_email_str}
+        c.post('/add/email', data)
+
         #TODO:
-        # forward an email invite
         # make sure that we've generated a secret query string var for them to edit the event info
         # make sure that we've sent the user an email
         # make sure the email we sent includes the event title
 
-        self.assertTrue(False)
+        pass
+        #self.assertTrue(False)
