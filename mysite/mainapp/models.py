@@ -45,6 +45,28 @@ class Email(models.Model):
     same_emails = models.ManyToManyField("self")
 
     @classmethod
+    def get_message_body_as_one_str(cls, input_message):
+        # in: an email.message.Message
+        # out: a string, representing the email body
+        # TODO
+        message_types = [
+            "text/html",
+            "text/plain"
+            ]
+        outer_types = [
+            'multipart/alternative'
+            ]
+        ignore_types = [
+            ]
+        body = ''
+        for message in input_message.walk():
+            message_type = message.get_content_type()
+            if message_type in message_types:
+                body += message.get_payload()
+
+        return body
+
+    @classmethod
     def create_and_save_from_email_str(cls, email_str):
         e = cls.create_from_email_str(email_str)
         e.save()
@@ -80,7 +102,7 @@ class Email(models.Model):
             'Message-Id' : 'message_id',
             }
         e.date = datetime.datetime(*rfc822.parsedate_tz(parsed_email['Date'])[:6])
-        e.body = parsed_email.get_payload().strip()
+        e.body = cls.get_message_body_as_one_str(parsed_email)
         for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
           setattr(e, model_field, parsed_email[email_field])
 
