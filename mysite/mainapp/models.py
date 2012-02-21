@@ -73,6 +73,11 @@ class Email(models.Model):
         return e
 
     @classmethod
+    def parse_from_field(cls, from_field):
+        # TODO: might want to do some more clever stuff here
+        return from_field
+
+    @classmethod
     def create_from_email_str(cls, email_as_str):
         # parse it into an email object
         # shove the unicode email string into a stringio before parsing
@@ -82,6 +87,7 @@ class Email(models.Model):
         #parsed_email = emailParser().parsestr(email_as_str)
         # until then:
         parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
+        print parsed_email['From']
         if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
             print "error parsing email"
             return HttpResponse("")
@@ -91,7 +97,7 @@ class Email(models.Model):
         e = Email()
         email_obj_field_to_model_field_mappings = {
             'To' : 'to',
-            'From' : 'from_field',
+            #'From' : 'from_field',
             'Cc' : 'cc',
             'Subject' : 'subject',
             'Return-Path' : 'return_path',
@@ -103,6 +109,7 @@ class Email(models.Model):
             }
         e.date = datetime.datetime(*rfc822.parsedate_tz(parsed_email['Date'])[:6])
         e.body = cls.get_message_body_as_one_str(parsed_email)
+        e.from_field = cls.parse_from_field(parsed_email['From'])
         for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
           setattr(e, model_field, parsed_email[email_field])
 
