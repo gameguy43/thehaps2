@@ -74,7 +74,7 @@ class EmailTest(TestCase):
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
 
-    def test_email_adding_to_db_causes_email_to_user(self)
+    def test_email_adding_to_db_causes_email_to_user(self):
         #TODO:
         # forward an email invite
         # make sure that we've generated a secret query string var for them to edit the event info
