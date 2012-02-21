@@ -20,7 +20,7 @@ class EmailTest(TestCase):
     def do_test_email_adding_to_db(self, email_str, email_data):
 
         the_subject = email_data['subject']
-        the_body = email_data['body']
+        the_body_contains = email_data['body_contains']
         the_sender_address = email_data['sender_address']
 
         # send the email to the post handler
@@ -30,7 +30,7 @@ class EmailTest(TestCase):
 
         # test that we have an email with that subject
         e = Email.objects.get(subject=the_subject)
-        self.assertEqual(e.body, the_body)
+        self.assertTrue(type(e.body.index(the_body_contains)) == int)
 
         # test that the sender address is correct
         self.assertEqual(e.user.email, the_sender_address)
@@ -56,21 +56,21 @@ class EmailTest(TestCase):
         # in other words, these are the "expected values"
         test_email_data =  {
             'subject': 'yo dog',
-            'body': 'asdfsadf',
+            'body_contains': 'asdfsadf',
             'sender_address': "pyrak@parktop.com",
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
 
     def test_email_adding_to_db_fusion_dance_show(self):
         # get the test email
-        test_email_filename = 'mainapp/test_data/forwarded_email_fusion_show.email'
+        test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
         test_email_str = open(test_email_filename, 'r').read()
         # hard code the fields to test against
         # in other words, these are the "expected values"
         test_email_data =  {
-            'subject': 'yo dog',
-            'body': 'asdfsadf',
-            'sender_address': "pyrak@parktop.com",
+            'subject': 'Re: ***This WEDNESDAY***',
+            'body_contains': 'sigma delt is the one right next to c&c, right?',
+            'sender_address': "parker.phinney@gmail.com",
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
 

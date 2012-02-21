@@ -46,7 +46,6 @@ def add_email_do(request):
     # grab the email from post
     email_as_str = request.POST['email_str']
     e = Email.create_and_save_from_email_str(email_as_str)
-
     # case: we already have this email
     if e.same_emails.exists():
         # grab the associated event from the database
