@@ -16,9 +16,9 @@ class SimpleTest(TestCase):
         """
         self.failUnlessEqual(1 + 1, 2)
 
+do_add_to_calendar_url = '/add/email'
+do_edit_calendar_item_url = '/edit/calendaritem'
 class EmailTest(TestCase):
-    do_add_to_calendar_url = '/add/email'
-    do_edit_calendar_item_url = '/edit/calendaritem'
     def do_test_email_adding_to_db(self, email_str, email_data):
 
         the_subject = email_data['subject']
