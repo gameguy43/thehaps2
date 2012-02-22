@@ -96,20 +96,14 @@ class EmailTest(TestCase):
     def test_whole_email_calendar_item_workflow(self):
         # get the test email--a forwarded invite
         test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        the_subject = 'Re: ***This WEDNESDAY***'
+
         test_email_str = open(test_email_filename, 'r').read()
 
         # send the email to the post handler
         c = Client()
         data = {'email_str': test_email_str}
         c.post(do_add_to_calendar_url, data)
-
-
-        test_email_data =  {
-            'subject': 'Re: ***This WEDNESDAY***',
-            'body_contains': 'sigma delt is the one right next to c&c, right?',
-            'sender_address': "parker.phinney@gmail.com",
-            }
-        self.do_test_email_adding_to_db(test_email_str, test_email_data)
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)
