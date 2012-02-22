@@ -17,6 +17,8 @@ class SimpleTest(TestCase):
         self.failUnlessEqual(1 + 1, 2)
 
 class EmailTest(TestCase):
+    do_add_to_calendar_url = '/add/email'
+    do_edit_calendar_item_url = '/edit/calendaritem'
     def do_test_email_adding_to_db(self, email_str, email_data):
 
         the_subject = email_data['subject']
@@ -26,7 +28,7 @@ class EmailTest(TestCase):
         # send the email to the post handler
         c = Client()
         data = {'email_str': email_str}
-        c.post('/add/email', data)
+        c.post(do_add_to_calendar_url, data)
 
         # test that we have an email with that subject
         e = Email.objects.get(subject=the_subject)
@@ -41,7 +43,7 @@ class EmailTest(TestCase):
         # NOTE: side-effects below this line. we're doing another insertion
         # send that same email again.
         # want to make sure the system notices they're the same email
-        c.post('/add/email', data)
+        c.post(do_add_to_calendar_url, data)
 
         # test that the two emails in our database know they're the same
         e1, e2 = Email.objects.all()
@@ -82,7 +84,7 @@ class EmailTest(TestCase):
         # send the email to the post handler
         c = Client()
         data = {'email_str': test_email_str}
-        c.post('/add/email', data)
+        c.post(do_add_to_calendar_url, data)
 
         #TODO:
         # make sure that we've generated a secret query string var for them to edit the event info
@@ -90,3 +92,49 @@ class EmailTest(TestCase):
         # make sure the email we sent includes the event title
 
         self.assertTrue(False)
+
+    def test_whole_email_calendar_item_workflow(self):
+        # get the test email--a forwarded invite
+        test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        test_email_str = open(test_email_filename, 'r').read()
+
+        # send the email to the post handler
+        c = Client()
+        data = {'email_str': test_email_str}
+        c.post(do_add_to_calendar_url, data)
+
+
+        test_email_data =  {
+            'subject': 'Re: ***This WEDNESDAY***',
+            'body_contains': 'sigma delt is the one right next to c&c, right?',
+            'sender_address': "parker.phinney@gmail.com",
+            }
+        self.do_test_email_adding_to_db(test_email_str, test_email_data)
+
+        # get the email object from the db
+        e = Email.objects.get(subject=the_subject)
+        # get the calendar item object from the db
+        c = e.user.userprofile.calendar.filter(name=the_subject).all()[0]
+
+        # post the updated calendar item data to the edit page
+        # NOTE: if we wanted to be more careful, we might actually fill in the form by hand
+        # but this should be fine for now
+        new_name = 'a'
+        new_location = 'b'
+        new_info = 'c'
+        data = {
+            'token' : c.token,
+            'name' : new_name,
+            'location' : new_location,
+            'info' : new_info,
+        }
+        c.post(do_edit_calendar_item_url, data)
+
+        # get the email object from the db
+        e = Email.objects.get(subject=the_subject)
+        # get the calendar item object from the db
+        c = e.user.userprofile.calendar.filter(name=the_subject).all()[0]
+
+        self.AssertEqual(new_name, c.name)
+        self.AssertEqual(new_location, c.location)
+        self.AssertEqual(new_info, c.info)
