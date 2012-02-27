@@ -9,6 +9,8 @@ from django.test import TestCase
 from django.test import Client
 from mysite.mainapp.models import Email
 
+from django.core import mail
+
 class SimpleTest(TestCase):
     def test_basic_addition(self):
         """
@@ -17,7 +19,7 @@ class SimpleTest(TestCase):
         self.failUnlessEqual(1 + 1, 2)
 
 do_add_to_calendar_url = '/add/email'
-do_edit_calendar_item_url = '/edit/calendaritem'
+do_edit_calendar_item_url_base = '/edit/calendaritem/'
 class EmailTest(TestCase):
     def do_test_email_adding_to_db(self, email_str, email_data):
 
@@ -100,19 +102,29 @@ class EmailTest(TestCase):
     def test_email_adding_to_db_causes_email_to_user(self):
         # get the test email--a forwarded invite
         test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        test_email_data =  {
+            'subject': 'Re: ***This WEDNESDAY***',
+            'body_contains': 'sigma delt is the one right next to c&c, right?',
+            'sender_address': "parker.phinney@gmail.com",
+            }
         test_email_str = open(test_email_filename, 'r').read()
 
         # send the email to the post handler
-        c = Client()
+        client = Client()
         data = {'email_str': test_email_str}
-        c.post(do_add_to_calendar_url, data)
+        client.post(do_add_to_calendar_url, data)
 
-        #TODO:
-        # make sure that we've generated a secret query string var for them to edit the event info
-        # make sure that we've sent the user an email
-        # make sure the email we sent includes the event title
+        # get the email obj
+        e = Email.objects.get(subject=test_email_data['subject'])
 
-        self.assertTrue(False)
+        # make sure that we've sent an email
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(email.to[0], e.user.email)
+        email_body = email.body
+
+        # TODO: make sure the email we sent includes the event title
+        # TODO: make sure the email we sent includes the edit link
 
     def test_whole_email_calendar_item_workflow(self):
         # get the test email--a forwarded invite
@@ -138,18 +150,19 @@ class EmailTest(TestCase):
         new_location = 'b'
         new_info = 'c'
         data = {
-            'token' : c.token,
+            #'token' : c.token,
             'name' : new_name,
             'location' : new_location,
             'info' : new_info,
         }
+        do_edit_calendar_item_url = do_edit_calendar_item_url_base + c.token
         client.post(do_edit_calendar_item_url, data)
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)
         # get the calendar item object from the db
-        c = e.user.userprofile.calendar.filter(name=the_subject).all()[0]
+        c = e.user.userprofile.calendar.get(name=new_name)
 
-        self.AssertEqual(new_name, c.name)
-        self.AssertEqual(new_location, c.location)
-        self.AssertEqual(new_info, c.info)
+        self.assertEqual(new_name, c.name)
+        self.assertEqual(new_location, c.location)
+        self.assertEqual(new_info, c.info)

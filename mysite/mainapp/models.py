@@ -9,7 +9,13 @@ import email.utils
 import random
 import string
 
+from django.template.loader import get_template
+from django.template import Context
+
+
 CAL_ITEM_TOKEN_LENGTH = 10
+FROM_ADDRESS = "parker@mycalendaritemhappytime.com"
+EDIT_CAL_ITEM_URL_BASE = '/edit/calendaritem/'
 class CalendarItem(models.Model):
     # CONSTANTS:
 
@@ -24,8 +30,12 @@ class CalendarItem(models.Model):
     token = models.SlugField(max_length=50, unique=True, null=True)
 
     def make_and_set_token(self):
+        # TODO: actually, i think i want a separate "Token" module. but this is fine for now.
         self.token =  ''.join(random.choice(string.letters + string.digits) for i in xrange(10))
         self.save()
+
+    def get_url_for_edit(self):
+        return EDIT_CAL_ITEM_URL_BASE + self.token
 
 def make_and_set_token_on_save(sender, instance, created, **kwargs):
     if created:
@@ -40,6 +50,17 @@ class UserProfile(models.Model):
         if created:
             UserProfile.objects.create(user=instance)
     post_save.connect(create_user_profile, sender=User)
+
+    def send_email_inviting_to_edit_cal_item(self, cal_item):
+        data_for_email_template = {
+            'edit_url' : cal_item.get_url_for_edit(),
+            }
+        email_str = get_template('edit_new_calendar_item_email.email').render(Context(data_for_email_template))
+        email_by_lines = email_str.split('\n')
+        email_subject = email_by_lines[0]
+        email_body = ''.join(email_by_lines[1:])
+        self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+        
 
 class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields

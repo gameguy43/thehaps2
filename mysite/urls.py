@@ -7,16 +7,20 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
+    # for admin docs:
+    # also add 'django.contrib.admindocs' to INSTALLED_APPS
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
+    # admin enabled:
     (r'^admin/', include(admin.site.urls)),
 
     (r'^$', 'mysite.mainapp.views.main'),
     (r'^ajax_add_event$', 'mysite.mainapp.views.ajax_add_event'),
+
     (r'^add/email$', 'mysite.mainapp.views.add_email_do'),
+    (r'^edit/calendaritem/(?P<token>\w+)$', 'mysite.mainapp.views.edit_calendaritem_do'),
+
+
 
     # to allow static files to be served by django (band-aid for now)
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
@@ -24,5 +28,7 @@ urlpatterns = patterns('',
     (r'^images/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT + 'images/', 'show_indexes': True}),
 
+
+    # gotta go last because everything matches this pattern
     (r'^(?P<slug>\w+)$', 'mysite.mainapp.views.to_gcal'),
 )

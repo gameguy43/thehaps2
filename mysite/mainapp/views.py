@@ -59,7 +59,23 @@ def add_email_do(request):
     # add the event to their event list
     e.user.userprofile.calendar.add(c)
 
-    # TODO: send confirmation email with the event info (inviting them to modify)
+    # send confirmation email with the event info (inviting them to modify)
+    e.user.userprofile.send_email_inviting_to_edit_cal_item(c)
+
+
+    return HttpResponse("1")
+
+def edit_calendaritem(request):
+    # TODO: generate a page with a form
+    return HttpResponse("1")
+
+def edit_calendaritem_do(request, token):
+    c = CalendarItem.objects.get(token=token)
+    c.name = request.POST['name']
+    c.location = request.POST['location']
+    c.info = request.POST['info']
+    c.save()
+    # TODO: should redirect on success
     return HttpResponse("1")
 
 
