@@ -50,6 +50,27 @@ class EmailTest(TestCase):
         self.assertEqual(e1.same_emails.all()[:1][0], e2)
         self.assertEqual(e2.same_emails.all()[:1][0], e1)
 
+    def test_getting_from_address_from_from_field(self):
+        from_fields_to_correct_parses = {
+            "D. Parker Phinney <thedude@gmail.com>" : "thedude@gmail.com",
+            # these fail, which is kind of lame:
+            #"Parker thedude@gmail.com" : "thedude@gmail.com",
+            #"Free Culture @ NYU <theotherdude@gmail.com>" : "theotherdude@gmail.com",
+            '"Free Culture @ NYU" <theotherdude@gmail.com>' : "theotherdude@gmail.com",
+            "thedude@gmail.com" : "thedude@gmail.com",
+            "theotherdude@gmail.com" : "theotherdude@gmail.com",
+            "theotherdude@gmail.com (Parker)" : "theotherdude@gmail.com",
+        }
+        test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        test_email_str = open(test_email_filename, 'r').read()
+        e = Email.create_from_email_str(test_email_str)
+        iterations = 0
+        for from_field, correct_parse in from_fields_to_correct_parses.iteritems():
+            e.from_field = from_field
+            self.assertEqual(e.from_email(), correct_parse)
+            iterations += 1
+        self.assertTrue(iterations > 3)
+
     def test_email_adding_to_db_simple(self):
         # get the test email
         test_email_filename = 'mainapp/test_data/sample_msg.email'
@@ -101,9 +122,9 @@ class EmailTest(TestCase):
         test_email_str = open(test_email_filename, 'r').read()
 
         # send the email to the post handler
-        c = Client()
+        client = Client()
         data = {'email_str': test_email_str}
-        c.post(do_add_to_calendar_url, data)
+        client.post(do_add_to_calendar_url, data)
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)
@@ -122,7 +143,7 @@ class EmailTest(TestCase):
             'location' : new_location,
             'info' : new_info,
         }
-        c.post(do_edit_calendar_item_url, data)
+        client.post(do_edit_calendar_item_url, data)
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)

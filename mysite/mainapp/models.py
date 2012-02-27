@@ -5,14 +5,33 @@ import datetime
 from email.parser import Parser as emailParser
 import StringIO
 import rfc822
+import email.utils
+import random
+import string
 
+CAL_ITEM_TOKEN_LENGTH = 10
 class CalendarItem(models.Model):
+    # CONSTANTS:
+
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     info = models.CharField(max_length=100)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    # used for generating a unique url for /viewing/. not private.
     slug = models.SlugField(max_length=50, unique=True, null=True)
+    # private. used for generating a unique url for /editing/
+    token = models.SlugField(max_length=50, unique=True, null=True)
+
+    def make_and_set_token(self):
+        self.token =  ''.join(random.choice(string.letters + string.digits) for i in xrange(10))
+        self.save()
+
+def make_and_set_token_on_save(sender, instance, created, **kwargs):
+    if created:
+        instance.make_and_set_token()
+post_save.connect(make_and_set_token_on_save, sender=CalendarItem)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -24,7 +43,7 @@ class UserProfile(models.Model):
 
 class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields
-    #PARSED FROM EMAIL:
+    # PARSED FROM EMAIL:
     subject = models.CharField(max_length=1000)
     body = models.TextField()
     # note: odd name below because from is a special word
@@ -39,7 +58,7 @@ class Email(models.Model):
     x_mailer =  models.CharField(max_length=1000, null=True, default="")
     message_id =  models.CharField(max_length=1000, null=True, default="")
     
-    #OTHER FIELDS:
+    # OTHER FIELDS:
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related", null=True)
     calendar_item = models.ForeignKey(CalendarItem, related_name="%(app_label)s_%(class)s_related", null=True)
     same_emails = models.ManyToManyField("self")
@@ -73,11 +92,6 @@ class Email(models.Model):
         return e
 
     @classmethod
-    def parse_from_field(cls, from_field):
-        # TODO: might want to do some more clever stuff here
-        return from_field
-
-    @classmethod
     def create_from_email_str(cls, email_as_str):
         # parse it into an email object
         # shove the unicode email string into a stringio before parsing
@@ -87,7 +101,6 @@ class Email(models.Model):
         #parsed_email = emailParser().parsestr(email_as_str)
         # until then:
         parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
-        print parsed_email['From']
         if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
             print "error parsing email"
             return HttpResponse("")
@@ -109,7 +122,7 @@ class Email(models.Model):
             }
         e.date = datetime.datetime(*rfc822.parsedate_tz(parsed_email['Date'])[:6])
         e.body = cls.get_message_body_as_one_str(parsed_email)
-        e.from_field = cls.parse_from_field(parsed_email['From'])
+        e.from_field = parsed_email['From'] #cls.parse_from_field(parsed_email['From'])
         for email_field, model_field in email_obj_field_to_model_field_mappings.iteritems():
           setattr(e, model_field, parsed_email[email_field])
 
@@ -119,7 +132,10 @@ class Email(models.Model):
         return e
 
     def from_email(self):
-        return self.from_field.split(' ')[0]
+        '''return only the email address part of the from field'''
+        real_name, email_addr = email.utils.parseaddr(self.from_field)
+        return email_addr
+
 
     def get_same_emails(self):
         return Email.objects.filter(body=self.body).exclude(id=self.id)
