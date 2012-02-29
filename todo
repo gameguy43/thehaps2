@@ -1,4 +1,13 @@
+* fix live site to be able to send emails
+** http://devcenter.heroku.com/articles/sendgrid#sendgrid_free
+** add the right config vars to settings.py
+** set us up to have a different settings.py on local and live. right?
+* fix integrityerror that local site is giving me right now
 * make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
+
+
+
+wishlist:
 * make it so that a user can have multiple email addresses
 
 original calendaritem.com todos
