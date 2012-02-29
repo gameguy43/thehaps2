@@ -3,10 +3,11 @@ to get started:
 * add mailbox_command = /usr/bin/procmail to /etc/postfix/main.cf
 
 to replicated what procmail does when it gets an email: (saves output to a log file)
+(note: this will send to the live server probably)
 $ cat sample_msg.email | procmail 
 
 to just send the email to the handler: (output to stdout/err)
-$ cat sample_msg.email | python mail_handler.py -o only_server_response 
+$ cat sample_msg.email | python mail_handler.py -d local -o only_server_response 
 
 to see the server's response in your web browser:
-cat sample_msg.email | python mail_handler.py -o only_server_response > /tmp/outfile.html && chromium-browser /tmp/outfile.html
+cat sample_msg.email | python mail_handler.py -d local -o only_server_response > /tmp/outfile.html && chromium-browser /tmp/outfile.html
