@@ -1,0 +1,6 @@
+to get started:
+* run setup.sh
+* add mailbox_command = /usr/bin/procmail to /etc/postfix/main.cf
+
+to replicated what procmail does when it gets an email:
+$ cat sample_msg.email | procmail 

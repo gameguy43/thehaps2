@@ -1,2 +1,2 @@
-:0c
-| /usr/bin/python /home/pyrak/workspace/thehaps/mail_handling/mail_handler.py
+:0 c
+| /usr/bin/python $HOME/thehaps/mail_handling/mail_handler.py &>> ~/mail_handler.log

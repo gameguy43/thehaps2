@@ -1,6 +1,7 @@
 import sys
 from email.parser import Parser
 import urllib
+import datetime
 
 
 #JUST_SAVE_EMAIL = True
@@ -8,12 +9,15 @@ JUST_SAVE_EMAIL = False
 
 process_from = 'stdin'
 #process_from = 'file'
-in_file = '/tmp/sample_msg.email'
+in_file = './sample_msg.email'
 
 destination_url = 'http://calendaritem.com/add/email'
 
 def lightweight_handler():
     '''send the email to the site as plaintext in POST data'''
+    print "======================================"
+    print "datetime::"
+    print datetime.datetime.now()
     # grab a file pointer for our email
     if process_from == 'stdin':
         fp = sys.stdin
@@ -24,12 +28,18 @@ def lightweight_handler():
         return
     # get the email as a string
     email_str = fp.read()
+    print "email str:"
+    print email_str
     post_data = {
         'email_str' : email_str,
         }
     fp = urllib.urlopen(destination_url,
                         urllib.urlencode(post_data))
-    return fp.read()
+    output = fp.read()
+    print "server response:"
+    print output
+    print "-----------------------"
+    return output
 
 if JUST_SAVE_EMAIL:
     import just_save_email
