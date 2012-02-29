@@ -125,6 +125,7 @@ class EmailTest(TestCase):
 
         # TODO: make sure the email we sent includes the event title
         # TODO: make sure the email we sent includes the edit link
+        self.assertTrue(False)
 
     def test_whole_email_calendar_item_workflow(self):
         # get the test email--a forwarded invite

@@ -1,8 +1,5 @@
-* figure out how to get an initial parse from an email
 * make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
-
 * make it so that a user can have multiple email addresses
-
 
 original calendaritem.com todos
 * bug where a line break in the description breaks the ajax
