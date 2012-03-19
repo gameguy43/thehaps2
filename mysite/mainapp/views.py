@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
-from django.contrib.sites.models import Site
 from django.db import IntegrityError
 
 from mysite.mainapp.models import CalendarItem
@@ -15,6 +14,8 @@ import os
 import pytz
 import hashlib
 import datetime
+
+from mysite.mainapp import helpers
 
 
 
@@ -134,7 +135,7 @@ def ajax_add_event(request):
         return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t get a good slug after X rolls'}), status=400)
 
     #gcal_url = google_url_from_calendaritem_dict(c.__dict__)
-    our_url = current_site_url() + '/' + c.slug
+    our_url = helpers.current_site_url() + c.slug
     return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 
@@ -170,12 +171,3 @@ def google_url_from_calendaritem_dict(calitem_dict):
     google_query_str = query_str_from_dict(google_query_str)
     google_url = ''.join([google_url_base, google_query_str])
     return google_url
-
-def current_site_url():
-    """Returns fully qualified URL (no trailing slash) for the current site."""
-    current_site = Site.objects.get_current()
-    #protocol = getattr(settings, 'MY_SITE_PROTOCOL', 'http')
-    protocol = 'http'
-    #port = getattr(settings, 'MY_SITE_PORT', '')
-    url = '%s://%s' % (protocol, current_site.domain)
-    return url

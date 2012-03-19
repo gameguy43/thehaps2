@@ -5,6 +5,23 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 
+ON_HEROKU = False
+# check to see if we're on heroku:
+# snipped from openhatch's settings.py. thanks dudes!
+# If we are running on Heroku, there will be a DATABASE_URL
+# and/or SHARED_DATABASE_URL that refers to postgres.
+_overridden_db = (os.environ.get('DATABASE_URL', '') or
+    os.environ.get('SHARED_DATABASE_URL', ''))
+if _overridden_db.startswith('postgres://'):
+    ON_HEROKU = True
+
+
+# NOTE: trailing slash
+BASE_URL_WITH_TRAILING_SLASH = 'http://calendaritem.com/'
+if not ON_HEROKU:
+    BASE_URL_WITH_TRAILING_SLASH = 'http://localhost:8000/'
+
+
 
 ADMINS = (
 # ('Your Name', 'your_email@domain.com'),
