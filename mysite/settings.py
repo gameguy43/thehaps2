@@ -10,14 +10,14 @@ ADMINS = (
 # ('Your Name', 'your_email@domain.com'),
 )
 
+MANAGERS = ADMINS
+
 # path to here, including the mysite dir at the end.
 # include trailing slash
 ABS_PATH_TO_THIS_REPO = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 
 STATIC_DOC_ROOT = ABS_PATH_TO_THIS_REPO + 'static/'
-
-MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = ABS_PATH_TO_THIS_REPO + 'databasae.sqlite3'             # Or path to database file if using sqlite3.

@@ -53,7 +53,7 @@ class UserProfile(models.Model):
 
     def send_email_inviting_to_edit_cal_item(self, cal_item):
         data_for_email_template = {
-            'edit_url' : cal_item.get_url_for_edit(),
+            'c' : cal_item,
             }
         email_str = get_template('edit_new_calendar_item_email.email').render(Context(data_for_email_template))
         email_by_lines = email_str.split('\n')

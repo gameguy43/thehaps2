@@ -102,11 +102,13 @@ class EmailTest(TestCase):
     def test_email_adding_to_db_causes_email_to_user(self):
         # get the test email--a forwarded invite
         test_email_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
-        test_email_data =  {
-            'subject': 'Re: ***This WEDNESDAY***',
-            'body_contains': 'sigma delt is the one right next to c&c, right?',
-            'sender_address': "parker.phinney@gmail.com",
-            }
+
+        # known/expected info
+        test_email_subject = 'Re: ***This WEDNESDAY***'
+        test_email_body_contains = 'sigma delt is the one right next to c&c, right?'
+        test_email_sender_address = "parker.phinney@gmail.com"
+        expected_event_title = test_email_subject
+
         test_email_str = open(test_email_filename, 'r').read()
 
         # send the email to the post handler
@@ -115,17 +117,22 @@ class EmailTest(TestCase):
         client.post(do_add_to_calendar_url, data)
 
         # get the email obj
-        e = Email.objects.get(subject=test_email_data['subject'])
+        e = Email.objects.get(subject=test_email_subject)
 
         # make sure that we've sent an email
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
         self.assertEqual(email.to[0], e.user.email)
-        email_body = email.body
 
-        # TODO: make sure the email we sent includes the event title
-        # TODO: make sure the email we sent includes the edit link
-        self.assertTrue(False)
+        # make sure the email we sent includes the event title
+        email_body = email.body
+        print email_body
+        self.assertTrue(expected_event_title in email_body)
+
+        # make sure the email we sent includes the edit link
+        # NOTE: we actually just look for the URL token
+        c = e.calendar_item
+        self.assertTrue(c.token in email_body)
 
     def test_whole_email_calendar_item_workflow(self):
         # get the test email--a forwarded invite
