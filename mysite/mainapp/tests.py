@@ -30,7 +30,10 @@ class EmailTest(TestCase):
         # send the email to the post handler
         c = Client()
         data = {'email_str': email_str}
-        c.post(do_add_to_calendar_url, data)
+        response = c.post(do_add_to_calendar_url, data)
+        # make sure the post target didn't complain
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '1')
 
         # test that we have an email with that subject
         e = Email.objects.get(subject=the_subject)
@@ -45,7 +48,10 @@ class EmailTest(TestCase):
         # NOTE: side-effects below this line. we're doing another insertion
         # send that same email again.
         # want to make sure the system notices they're the same email
-        c.post(do_add_to_calendar_url, data)
+        response = c.post(do_add_to_calendar_url, data)
+        # make sure the post target didn't complain
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '1')
 
         # test that the two emails in our database know they're the same
         e1, e2 = Email.objects.all()
@@ -114,7 +120,10 @@ class EmailTest(TestCase):
         # send the email to the post handler
         client = Client()
         data = {'email_str': test_email_str}
-        client.post(do_add_to_calendar_url, data)
+        response = client.post(do_add_to_calendar_url, data)
+        # make sure the post target didn't complain
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '1')
 
         # get the email obj
         e = Email.objects.get(subject=test_email_subject)
@@ -144,7 +153,9 @@ class EmailTest(TestCase):
         # send the email to the post handler
         client = Client()
         data = {'email_str': test_email_str}
-        client.post(do_add_to_calendar_url, data)
+        response = client.post(do_add_to_calendar_url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '1')
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)
