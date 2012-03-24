@@ -175,7 +175,9 @@ class EmailTest(TestCase):
             'info' : new_info,
         }
         do_edit_calendar_item_url = do_edit_calendar_item_url_base + c.token
-        client.post(do_edit_calendar_item_url, data)
+        response = client.post(do_edit_calendar_item_url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '1')
 
         # get the email object from the db
         e = Email.objects.get(subject=the_subject)
