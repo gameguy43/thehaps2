@@ -1,6 +1,8 @@
 # Django settings for mysite project.
 import os
 
+from secret_settings_holder import *
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

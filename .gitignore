@@ -1,2 +1,3 @@
 venv
 *.pyc
+secret_settings.py
