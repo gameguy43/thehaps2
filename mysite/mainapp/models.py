@@ -48,10 +48,6 @@ post_save.connect(make_and_set_token_on_save, sender=CalendarItem)
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     calendar = models.ManyToManyField("CalendarItem")
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            UserProfile.objects.create(user=instance)
-    post_save.connect(create_user_profile, sender=User)
 
     def send_email_inviting_to_edit_cal_item(self, cal_item):
         data_for_email_template = {
@@ -62,6 +58,11 @@ class UserProfile(models.Model):
         email_subject = email_by_lines[0]
         email_body = ''.join(email_by_lines[1:])
         self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+post_save.connect(create_user_profile, sender=User)
         
 
 class Email(models.Model):
@@ -150,7 +151,9 @@ class Email(models.Model):
           setattr(e, model_field, parsed_email[email_field])
 
         # get or create the user who sent this email
+        assert True # TODO: DEBUG
         e.user, created = User.objects.get_or_create(email=e.from_email())
+        e.save() #TODO: might not be necessary. not sure.
 
         return e
 

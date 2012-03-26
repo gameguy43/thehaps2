@@ -57,6 +57,7 @@ def add_email_do(request):
         # come up with our best guess parse of the event info
         # also, create a new event for it and put it in the database
         c = e.create_auto_parse_calendar_item()
+    
     # add the event to their event list
     e.user.userprofile.calendar.add(c)
 
