@@ -3,7 +3,7 @@ import os
 
 from secret_settings_holder import *
 
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -78,7 +78,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '5!8zn9ca9(%d%872%v(v3o5)c7ggr#l557s)l*2nchk@zs7h_2'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -112,3 +112,10 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = 'mainapp.UserProfile'
+
+
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT', 25))
+EMAIL_USE_TLS = bool(os.environ.get('DJANGO_EMAIL_USE_TLS', True))
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
