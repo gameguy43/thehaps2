@@ -14,9 +14,12 @@ from django.template import Context
 
 from mysite.mainapp import helpers
 
+from django.core.mail import send_mail
+
+
 
 CAL_ITEM_TOKEN_LENGTH = 10
-FROM_ADDRESS = "parker@mycalendaritemhappytime.com"
+FROM_ADDRESS = "robot@calendaritem.com"
 EDIT_CAL_ITEM_URL_BASE = helpers.current_site_url() + 'edit/calendaritem/'
 class CalendarItem(models.Model):
     # CONSTANTS:
@@ -57,7 +60,13 @@ class UserProfile(models.Model):
         email_by_lines = email_str.split('\n')
         email_subject = email_by_lines[0]
         email_body = ''.join(email_by_lines[1:])
-        self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+        #self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+        send_mail(email_subject, email_body, FROM_ADDRESS, [self.user.email])
+        print "SENTTTTTTTTTTTT"
+        print
+        print email_subject
+        print
+        print email_body
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
