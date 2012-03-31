@@ -118,7 +118,4 @@ EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
 EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT', 25))
 EMAIL_USE_TLS = bool(os.environ.get('DJANGO_EMAIL_USE_TLS', False))
-print '========================='
-print EMAIL_USE_TLS
-print '========================='
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
