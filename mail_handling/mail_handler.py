@@ -64,10 +64,17 @@ if output != SUCCESS_OUTPUT:
 
     # email them the output
     # assemble the email
+    # body:
     to_addr = email_addr
     from_addr = 'robot@calendaritem.com'
     email_strs = ['CalendarItem failed to process your email. Something went horribly wrong. This is super lame and we\'re real sorry about it. Here\'s what the server said:\n\n']
     email_strs.append(output)
+    email_strs.append('================================')
+    email_strs.append('and here\'s the email you sent us, just to be sure:')
+    email_strs.append('================================')
+    email_strs.append(email_str)
+
+    # assemble the email object:
     msg = MIMEText('\n'.join(email_strs))
     msg['Subject'] = '[CalendarItem] ERROR! OH NO!'
     msg['From'] = from_addr
