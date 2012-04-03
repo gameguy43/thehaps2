@@ -24,9 +24,9 @@ EDIT_CAL_ITEM_URL_BASE = helpers.current_site_url() + 'edit/calendaritem/'
 class CalendarItem(models.Model):
     # CONSTANTS:
 
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    info = models.CharField(max_length=100)
+    name = models.CharField(max_length=1000)
+    location = models.CharField(max_length=1000)
+    info = models.CharField(max_length=90000)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
     # used for generating a unique url for /viewing/. not private.
@@ -80,7 +80,7 @@ class Email(models.Model):
     subject = models.CharField(max_length=1000)
     body = models.TextField()
     # note: odd name below because from is a special word
-    from_field = models.CharField(max_length=100)
+    from_field = models.CharField(max_length=1000)
     to = models.CharField(max_length=1000)
     cc = models.CharField(max_length=1000, null=True, default="")
     date = models.DateTimeField()
@@ -163,6 +163,7 @@ class Email(models.Model):
         assert True # TODO: DEBUG
         e.user, created = User.objects.get_or_create(email=e.from_email())
         e.save() #TODO: might not be necessary. not sure.
+        assert e.user
 
         return e
 
