@@ -105,7 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mysite.mainapp',
     'south',
-    #'django_extensions',
+    'django_extensions',
     #'mysite.urlgen',
 )
 

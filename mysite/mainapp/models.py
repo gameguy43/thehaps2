@@ -169,6 +169,13 @@ class Email(models.Model):
     def from_email(self):
         '''return only the email address part of the from field'''
         real_name, email_addr = email.utils.parseaddr(self.from_field)
+        print email_addr
+        return email_addr
+
+    def to_email(self):
+        '''return only the email address part of the from field'''
+        real_name, email_addr = email.utils.parseaddr(self.to)
+        print email_addr
         return email_addr
 
 

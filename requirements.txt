@@ -6,5 +6,7 @@ django-extensions==0.8
 ipdb==0.6.1
 ipython==0.12
 psycopg2==2.4.2
+pygraphviz==1.1
+pysqlite==2.6.3
 pytz==2011n
 wsgiref==0.1.2
