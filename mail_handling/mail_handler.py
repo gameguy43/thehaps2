@@ -4,6 +4,11 @@ import datetime
 from optparse import OptionParser
 import StringIO
 
+def get_from_field_by_force_from_email_str(email_str):
+    def get_substr_between_tokens(base_str, token1, token2):
+        return base_str.split(token1)[1].split(token2)[0]
+    return get_substr_between_tokens(email_str, 'From: ', 'To: ').strip()
+
 
 SUCCESS_OUTPUT = '1'
 
@@ -15,6 +20,8 @@ parser = OptionParser()
 parser.add_option("-o", "--output", action="store", type="string", dest="output", default="log", help="'log' or 'only_server_response'")
 # "default" or "local"
 parser.add_option("-d", "--destination_url", action="store", type="string", dest="dest_url", default="log", help="where to send the email as post? options are hard-coded in this file. so do one of 'default' or 'local'")
+parser.add_option("-i", "--input_file", action="store", type="string", dest="in_file", default="stdin", help="path to sample email file. if stdin (default), just read from stdin (cat the file and pipe to this script)")
+
 (options, args) = parser.parse_args()
 
 if options.dest_url == 'default':
@@ -29,8 +36,10 @@ if options.output == 'log':
     print "datetime:"
     print datetime.datetime.now()
 
-# grab a file pointer for our email
 fp = sys.stdin
+if options.in_file != 'stdin':
+    fp = open(options.in_file, 'r')
+
 # get the email as a string
 email_str = fp.read()
 
@@ -60,7 +69,10 @@ if output != SUCCESS_OUTPUT:
 
     # get their email address
     parsed_email = emailParser().parse(StringIO.StringIO(email_str))
+    if not parsed_email['From']:
+        parsed_email['From'] = get_from_field_by_force_from_email_str(email_str)
     real_name, email_addr = email.utils.parseaddr(parsed_email['From'])
+    assert email_addr
 
     # email them the output
     # assemble the email
@@ -82,5 +94,11 @@ if output != SUCCESS_OUTPUT:
 
     # send it
     s = smtplib.SMTP('localhost')
+    print '============='
+    print to_addr
+    print '============='
     s.sendmail(from_addr, [to_addr], msg.as_string())
     s.quit()
+
+
+
