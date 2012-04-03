@@ -47,13 +47,16 @@ def add_email_do(request):
     # grab the email from post
     email_as_str = request.POST['email_str']
     e = Email.create_and_save_from_email_str(email_as_str)
+    c = None
     # case: we already have this email
     if e.same_emails.exists():
         # grab the associated event from the database
         # (just assume that the first same email speaks for them all)
         c = e.same_emails.all()[:1][0].calendar_item
     # case: this email is new to the system
-    else:
+    # we didn't make this an else because we also want to create in the case
+    # where we had a previous email but no calendar item for it
+    if not c:
         # come up with our best guess parse of the event info
         # also, create a new event for it and put it in the database
         c = e.create_auto_parse_calendar_item()
