@@ -59,6 +59,7 @@ def add_email_do(request):
         c = e.create_auto_parse_calendar_item()
     
     # add the event to their event list
+    assert c
     e.user.userprofile.calendar.add(c)
 
     # send confirmation email with the event info (inviting them to modify)

@@ -194,6 +194,7 @@ class Email(models.Model):
         c.save()
         self.calendar_item = c
         self.save()
+        assert c
         return c
 
 
