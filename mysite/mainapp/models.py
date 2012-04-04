@@ -60,8 +60,9 @@ class UserProfile(models.Model):
         email_by_lines = email_str.split('\n')
         email_subject = email_by_lines[0]
         email_body = ''.join(email_by_lines[1:])
-        #self.user.email_user(email_subject, email_body, FROM_ADDRESS)
-        send_mail(email_subject, email_body, FROM_ADDRESS, [self.user.email])
+        #email_body = 'THIS IS A TEST' #TODO: DEBUG
+        self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+        #send_mail(email_subject, email_body, FROM_ADDRESS, [self.user.email])
         print "SENTTTTTTTTTTTT"
         print
         print email_subject
@@ -135,11 +136,14 @@ class Email(models.Model):
         # until then:
         parsed_email = emailParser().parse(StringIO.StringIO(email_as_str))
         if not parsed_email['From'] and not parsed_email['To'] and not parsed_email['Body']:
+            #import ipdb; ipdb.set_trace()
             print "error parsing email"
-            return HttpResponse("")
+            # for now, just explode:
+            assert False
         if not parsed_email['From'] or not parsed_email['To']:
             print "email missing crucial field"
-            return HttpResponse("")
+            # for now, just explode:
+            assert False
         e = Email()
         email_obj_field_to_model_field_mappings = {
             'To' : 'to',
