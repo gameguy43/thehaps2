@@ -1,0 +1,75 @@
+[CalendarItem] NEW: {{c.name}}
+<html>
+<head>
+<style>
+    body { height:100%;margin:0px;padding:0px; }
+    #desc { font-size: .8em; }
+    #calitem_desc { margin: 0; padding: 0; border: gray 1px dashed; }
+    h3, h4 { margin: 0; padding: 0; }
+    #calitem_desc p { margin: 0 0 5px 0; padding: 0; }
+    #p_with_editlink { font-size: 1.2em; }
+    
+</style>
+</head>
+<body>
+<h1>
+Hey {{userprofile.get_name}}!
+</h1>
+
+<p>
+I see you're trying to add something to your calendar. Rockin!
+</p>
+
+<p>
+Here's the best that we came up with:
+</p>
+
+<div id="calitem_desc">
+<h3>
+Name
+</h3>
+<p>
+{{c.name}}
+</p>
+
+<h3>
+Location
+</h3>
+<p>
+{{c.location}}
+</p>
+
+<h3>
+Start
+</h3>
+<p>
+{{c.start_datetime}}
+</p>
+
+<h3>
+End
+</h3>
+<p>
+{{c.end_datetime}}
+<p>
+
+<h4>
+Notes
+</h4>
+<p id='desc'>
+{{c.info}}
+</p>
+</div>
+
+<p>
+We did our best. But we make hella mistakes.
+</p>
+
+<p id="p_with_editlink">
+To fix it, go here: <a href="{{c.get_url_for_edit}}">{{c.get_url_for_edit}}</a>
+</p>
+
+<p>
+Thanks!
+</p>
+</html>

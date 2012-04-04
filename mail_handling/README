@@ -10,4 +10,4 @@ to just send the email to the handler: (output to stdout/err)
 $ cat sample_msg.email | python mail_handler.py -d local -o only_server_response 
 
 to see the server's response in your web browser:
-cat sample_msg.email | python mail_handler.py -d local -o only_server_response > /tmp/outfile.html && chromium-browser /tmp/outfile.html
+cat sample_msg.email | python mail_handler.py -d local -o only_server_response > /tmp/outfile.html ; chromium-browser /tmp/outfile.html

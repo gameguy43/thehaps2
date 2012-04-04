@@ -15,6 +15,7 @@ from django.template import Context
 from mysite.mainapp import helpers
 
 from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 
 
@@ -52,16 +53,26 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     calendar = models.ManyToManyField("CalendarItem")
 
+    def get_name(self):
+        if self.user.first_name:
+            return self.user.first_name
+        else:
+            return 'dude'
+
     def send_email_inviting_to_edit_cal_item(self, cal_item):
         data_for_email_template = {
             'c' : cal_item,
+            'userprofile' : self,
             }
-        email_str = get_template('edit_new_calendar_item_email.email').render(Context(data_for_email_template))
+        email_str = get_template('edit_new_calendar_item_email.html').render(Context(data_for_email_template))
         email_by_lines = email_str.split('\n')
         email_subject = email_by_lines[0]
         email_body = ''.join(email_by_lines[1:])
         #email_body = 'THIS IS A TEST' #TODO: DEBUG
-        self.user.email_user(email_subject, email_body, FROM_ADDRESS)
+        msg = EmailMessage(email_subject, email_body, FROM_ADDRESS, [self.user.email])
+        msg.content_subtype = "html"
+        msg.send()
+        #self.user.email_user(email_subject, email_body, FROM_ADDRESS, html_message=email_body)
         #send_mail(email_subject, email_body, FROM_ADDRESS, [self.user.email])
         print "SENTTTTTTTTTTTT"
         print
