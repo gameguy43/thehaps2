@@ -17,6 +17,11 @@ from mysite.mainapp import helpers
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 
+from django.forms import ModelForm
+from django.forms import Textarea
+
+import vobject
+
 
 
 CAL_ITEM_TOKEN_LENGTH = 10
@@ -52,6 +57,27 @@ post_save.connect(make_and_set_token_on_save, sender=CalendarItem)
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     calendar = models.ManyToManyField("CalendarItem")
+
+    def get_ical_feed(self):
+        # mega huge ultra thanks to Martin De Wulf:
+        # http://www.multitasked.net/2010/jun/16/exporting-schedule-django-application-google-calen/
+        cal = vobject.iCalendar()
+        cal.add('method').value = 'PUBLISH'  # IE/Outlook needs this
+        for c in self.calendar.all():
+            vevent = cal.add('vevent')
+            vevent.add('dtstart').value = c.start_datetime
+            vevent.add('dtend').value = c.end_datetime
+            vevent.add('summary').value = c.name
+            vevent.add('uid').value = str(c.id)
+
+        return cal.serialize()
+
+    def get_ical_feed_httpresponse(self):
+        from django.http import HttpResponse
+        response = HttpResponse(self.get_ical_feed(), mimetype='text/calendar')
+        response['Filename'] = 'shifts.ics'  # IE needs this
+        response['Content-Disposition'] = 'attachment; filename=shifts.ics'
+        return response
 
     def get_name(self):
         if self.user.first_name:
@@ -177,13 +203,11 @@ class Email(models.Model):
     def from_email(self):
         '''return only the email address part of the from field'''
         real_name, email_addr = email.utils.parseaddr(self.from_field)
-        print email_addr
         return email_addr
 
     def to_email(self):
         '''return only the email address part of the from field'''
         real_name, email_addr = email.utils.parseaddr(self.to)
-        print email_addr
         return email_addr
 
 
@@ -212,3 +236,14 @@ def get_same_emails_on_save(sender, instance, created, **kwargs):
         for same_email in same_emails.all():
             instance.same_emails.add(same_email)
 post_save.connect(get_same_emails_on_save, sender=Email)
+
+
+
+
+class CalendarItemForm(ModelForm):
+    class Meta:
+        model = CalendarItem
+        exclude = ('slug', 'token')
+        widgets = {
+            'info': Textarea(attrs={'cols': 20, 'rows': 10}),
+            }

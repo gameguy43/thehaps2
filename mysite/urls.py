@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     (r'^ajax_add_event$', 'mysite.mainapp.views.ajax_add_event'),
 
     (r'^add/email$', 'mysite.mainapp.views.add_email_do'),
-    (r'^edit/calendaritem/(?P<token>\w+)$', 'mysite.mainapp.views.edit_calendaritem_do'),
+    (r'^edit/calendaritem/(?P<token>\w+)$', 'mysite.mainapp.views.edit_calendaritem'),
 
 
 
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     (r'^images/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT + 'images/', 'show_indexes': True}),
 
+    (r'^(?P<user_id>\d+)/feed.ics$', 'mysite.mainapp.views.calendar_feed'),
 
     # gotta go last because everything matches this pattern
     (r'^(?P<slug>\w+)$', 'mysite.mainapp.views.to_gcal'),

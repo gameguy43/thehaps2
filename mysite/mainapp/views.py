@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.db import IntegrityError
 
 from mysite.mainapp.models import CalendarItem
+from mysite.mainapp.models import CalendarItemForm
 from mysite.mainapp.models import Email
 from django.contrib.auth.models import User
 
@@ -18,7 +19,10 @@ import datetime
 from mysite.mainapp import helpers
 
 
-
+def url_with_query_str_vars(url, query_str_vars_as_dict):
+    # TODO: edit this to notice if there are already query str vars and act accordingly
+    # for now, this will do horrible things unless the url currently has no question mark
+    return url + '?' + urllib.urlencode(query_str_vars_as_dict)
 
 def to_gcal(request, slug):
     #get the calendar item
@@ -71,20 +75,30 @@ def add_email_do(request):
 
     return HttpResponse("1")
 
-def edit_calendaritem(request):
-    # TODO: generate a page with a form
-    return HttpResponse("1")
-
-def edit_calendaritem_do(request, token):
+def edit_calendaritem(request, token):
+    success = False
     c = CalendarItem.objects.get(token=token)
-    c.name = request.POST['name']
-    c.location = request.POST['location']
-    c.info = request.POST['info']
-    c.save()
-    # TODO: should redirect on success
-    return HttpResponse("1")
+    # TODO: handle case where we can't get that calendar item
+    # if they submitted the form, handle it:
+    if request.POST:
+        form = CalendarItemForm(request.POST, instance=c)
+        if form.is_valid():
+            form.save()
+            # TODO: if this was an ajax request, just return a success JSON message
+            success = True
 
+    else:
+        form = CalendarItemForm(instance=c)
 
+    data = {
+        'success' : success,
+        'form' : form,
+        }
+    return render_to_response('edit_cal_item.html', data)
+
+def calendar_feed(request, user_id):
+    userprofile = User.objects.get(pk=user_id).userprofile
+    return userprofile.get_ical_feed_httpresponse()
 
 def ajax_add_event(request):
     #decoding the inputted JSON blob
