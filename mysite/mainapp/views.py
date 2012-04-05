@@ -72,7 +72,6 @@ def add_email_do(request):
     # send confirmation email with the event info (inviting them to modify)
     e.user.userprofile.send_email_inviting_to_edit_cal_item(c)
 
-
     return HttpResponse("1")
 
 def edit_calendaritem(request, token):

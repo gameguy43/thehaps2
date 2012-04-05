@@ -7,5 +7,8 @@ ipdb==0.6.1
 ipython==0.12
 psycopg2==2.4.2
 pygraphviz==1.1
+python-dateutil==2.1
 pytz==2011n
+six==1.1.0
+vobject==0.8.1c
 wsgiref==0.1.2
