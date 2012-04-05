@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+{% block main %}
+{% if success %}
+<div id="success">
+SUCCESS! YOUR CALENDAR ITEM HAS BEEN UPDATED
+<span style="display:none">
+successful edit/add
+</span>
+</div>
+{% endif %}
+<form method="POST" action="{{request.path}}">
+{{form.as_p}}
+<input type="submit" value="Save" />
+</form>
+{% endblock %}
