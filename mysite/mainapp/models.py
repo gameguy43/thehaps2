@@ -68,17 +68,9 @@ class UserProfile(models.Model):
         email_by_lines = email_str.split('\n')
         email_subject = email_by_lines[0]
         email_body = ''.join(email_by_lines[1:])
-        #email_body = 'THIS IS A TEST' #TODO: DEBUG
         msg = EmailMessage(email_subject, email_body, FROM_ADDRESS, [self.user.email])
         msg.content_subtype = "html"
         msg.send()
-        #self.user.email_user(email_subject, email_body, FROM_ADDRESS, html_message=email_body)
-        #send_mail(email_subject, email_body, FROM_ADDRESS, [self.user.email])
-        print "SENTTTTTTTTTTTT"
-        print
-        print email_subject
-        print
-        print email_body
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
