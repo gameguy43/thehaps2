@@ -1,10 +1,5 @@
-* fix live site to be able to send emails
-** http://devcenter.heroku.com/articles/sendgrid#sendgrid_free
-** add the right config vars to settings.py
-** set us up to have a different settings.py on local and live. right?
-* fix integrityerror that local site is giving me right now
-* make email delivery pyrak@calendaritem.com -> pyrak@parkcity.makesad.us work
-
+make google calendar refresch ical feed more often:
+* http://stackoverflow.com/questions/2158507/how-to-publish-a-dynamic-event-feed-for-google-calendar/2158546#2158546
 
 
 wishlist:
