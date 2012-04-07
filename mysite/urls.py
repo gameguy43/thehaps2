@@ -29,6 +29,7 @@ urlpatterns = patterns('',
         {'document_root': settings.STATIC_DOC_ROOT + 'images/', 'show_indexes': True}),
 
     (r'^(?P<user_id>\d+)/feed.ics$', 'mysite.mainapp.views.calendar_feed'),
+    (r'^(?P<user_id>\d+)/calendar$', 'mysite.mainapp.views.show_user_calendar'),
 
     # gotta go last because everything matches this pattern
     (r'^(?P<slug>\w+)$', 'mysite.mainapp.views.to_gcal'),

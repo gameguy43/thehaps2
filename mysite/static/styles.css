@@ -34,6 +34,26 @@ h3{
     padding: 0;
 }
 
+h4{
+    font-size: 1.1em;
+    margin: 0;
+    padding: 0;
+}
+
+.calitem_desc {
+    margin: 0 0 10px 0;
+    padding: 0;
+    border: gray 1px dashed;
+    font-size: .8em;
+}
+.calitem_desc p {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
+.calitem_desc .desc {
+    font-size: .8em;
+}
 
 form#event-info-form{
     background-color: #ededed;
