@@ -11,6 +11,8 @@ urlpatterns = patterns('',
     # also add 'django.contrib.admindocs' to INSTALLED_APPS
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
+    url(r'', include('social_auth.urls')),
+
     # admin enabled:
     (r'^admin/', include(admin.site.urls)),
 

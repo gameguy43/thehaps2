@@ -106,10 +106,65 @@ INSTALLED_APPS = (
     'mysite.mainapp',
     'south',
     'django_extensions',
+    'social_auth',
     #'mysite.urlgen',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    #'social_auth.backends.twitter.TwitterBackend',
+    #'social_auth.backends.google.GoogleOAuthBackend',
+    #'social_auth.backends.google.GoogleOAuth2Backend',
+    #'social_auth.backends.google.GoogleBackend',
+    #'social_auth.backends.yahoo.YahooBackend',
+    #'social_auth.backends.browserid.BrowserIDBackend',
+    #'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    #'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    #'social_auth.backends.contrib.orkut.OrkutBackend',
+    #'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    #'social_auth.backends.contrib.github.GithubBackend',
+    #'social_auth.backends.contrib.dropbox.DropboxBackend',
+    #'social_auth.backends.contrib.flickr.FlickrBackend',
+    #'social_auth.backends.contrib.instagram.InstagramBackend',
+)
+
+
+FACEBOOK_APP_ID = os.environ.get('DJANGO_FACEBOOK_APP_ID')
+FACEBOOK_API_SECRET = os.environ.get('DJANGO_FACEBOOK_API_SECRET')
+#TWITTER_CONSUMER_KEY         = ''
+#TWITTER_CONSUMER_SECRET      = ''
+#LINKEDIN_CONSUMER_KEY        = ''
+#LINKEDIN_CONSUMER_SECRET     = ''
+#ORKUT_CONSUMER_KEY           = ''
+#ORKUT_CONSUMER_SECRET        = ''
+#GOOGLE_CONSUMER_KEY          = ''
+#GOOGLE_CONSUMER_SECRET       = ''
+#GOOGLE_OAUTH2_CLIENT_ID      = ''
+#GOOGLE_OAUTH2_CLIENT_SECRET  = ''
+#FOURSQUARE_CONSUMER_KEY      = ''
+#FOURSQUARE_CONSUMER_SECRET   = ''
+#GITHUB_APP_ID                = ''
+#GITHUB_API_SECRET            = ''
+#DROPBOX_APP_ID               = ''
+#DROPBOX_API_SECRET           = ''
+#FLICKR_APP_ID                = ''
+#FLICKR_API_SECRET            = ''
+#INSTAGRAM_CLIENT_ID          = ''
+#INSTAGRAM_CLIENT_SECRET      = ''
+
+LOGIN_URL          = '/login-form/'
+LOGIN_REDIRECT_URL = '/logged-in/'
+LOGIN_ERROR_URL    = '/login-error/'
+
 AUTH_PROFILE_MODULE = 'mainapp.UserProfile'
+
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
+SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+#SOCIAL_AUTH_USER_MODEL = 'mainapp.UserProfile'
+
 
 
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
@@ -117,3 +172,4 @@ EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT', 25))
 EMAIL_USE_TLS = bool(os.environ.get('DJANGO_EMAIL_USE_TLS', False))
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
+
