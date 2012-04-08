@@ -3,11 +3,15 @@ South==0.7.3
 Werkzeug==0.8.3
 distribute==0.6.21
 django-extensions==0.8
+django-social-auth==0.6.7
+httplib2==0.7.4
 ipdb==0.6.1
 ipython==0.12
+oauth2==1.5.211
 psycopg2==2.4.2
 pygraphviz==1.1
 python-dateutil==2.1
+python-openid==2.2.5
 pytz==2011n
 six==1.1.0
 vobject==0.8.1c
