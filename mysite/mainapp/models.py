@@ -100,7 +100,7 @@ class UserProfile(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if not instance.userprofile:
+        if not UserProfile.objects.filter(user=instance):
             UserProfile.objects.create(user=instance)
 post_save.connect(create_user_profile, sender=User)
         
