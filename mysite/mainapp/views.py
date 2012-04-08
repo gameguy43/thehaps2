@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -17,6 +18,8 @@ import pytz
 import hashlib
 import datetime
 
+from django.template import RequestContext
+
 from mysite.mainapp import helpers
 
 
@@ -33,8 +36,8 @@ def to_gcal(request, slug):
     return HttpResponseRedirect(gcal_url)
 
 def main(request):
-    data = {}
-    return render_to_response('index.html', data)
+    #return render_to_response('index.html', context_instance=RequestContext(request))
+    return render(request, 'index.html')
 
 def json_str_to_dict(json_str):
     def strip_newlines_from_str(string):

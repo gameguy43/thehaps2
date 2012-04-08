@@ -155,7 +155,7 @@ FACEBOOK_API_SECRET = os.environ.get('DJANGO_FACEBOOK_API_SECRET')
 #INSTAGRAM_CLIENT_SECRET      = ''
 
 LOGIN_URL          = '/login-form/'
-LOGIN_REDIRECT_URL = '/logged-in/'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'
 
 AUTH_PROFILE_MODULE = 'mainapp.UserProfile'
