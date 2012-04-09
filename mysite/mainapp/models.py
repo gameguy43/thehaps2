@@ -80,6 +80,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     calendar = models.ManyToManyField("CalendarItem")
 
+
+    def claim_email_address(self, email_address):
+        EmailAddress.objects.create(email_address=email_address, user=self.user)
+
     def get_ical_feed(self):
         # mega huge ultra thanks to Martin De Wulf:
         # http://www.multitasked.net/2010/jun/16/exporting-schedule-django-application-google-calen/

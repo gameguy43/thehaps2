@@ -7,16 +7,13 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.test import Client
+
 from mysite.mainapp.models import Email
+from mysite.mainapp.models import EmailAddress
+from django.contrib.auth.models import User
 
 from django.core import mail
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
 
 do_add_to_calendar_url = '/add/email'
 do_edit_calendar_item_url_base = '/edit/calendaritem/'
@@ -101,7 +98,7 @@ class EmailTest(TestCase):
         test_email_data =  {
             'subject': 'Re: ***This WEDNESDAY***',
             'body_contains': 'sigma delt is the one right next to c&c, right?',
-            'sender_address': "parker.phinney@gmail.com",
+            'sender_address': "gameguy43@gmail.com",
             }
         self.do_test_email_adding_to_db(test_email_str, test_email_data)
 
@@ -187,3 +184,32 @@ class EmailTest(TestCase):
         self.assertEqual(new_name, c.name)
         self.assertEqual(new_location, c.location)
         self.assertEqual(new_info, c.info)
+
+    def test_that_user_can_have_multiple_email_addresses(self):
+        # get the test email--a forwarded invite
+        test_email1_filename = 'mainapp/test_data/reply_to_forwarded_email_fusion_show.email'
+        test_email1_from_address = 'gameguy43@gmail.com'
+        test_email1_str = open(test_email1_filename, 'r').read()
+
+        test_email2_filename = 'mainapp/test_data/latenight_info_to_addat.email'
+        test_email2_from_address = 'parker.phinney@gmail.com'
+        test_email2_str = open(test_email2_filename, 'r').read()
+
+
+        # send the first email to the post handler
+        Client().post(do_add_to_calendar_url, {'email_str': test_email1_str})
+
+        # claim another email address for the user
+        user = User.objects.get(email=test_email1_from_address)
+        user.userprofile.claim_email_address(test_email2_from_address)
+
+        # should get the same user when looking up by address
+        user1 = EmailAddress.get_or_create_user_with_address(test_email1_from_address)
+        user2 = EmailAddress.get_or_create_user_with_address(test_email2_from_address)
+        self.assertEqual(user1, user2)
+
+        # send the second email to the post handler
+        Client().post(do_add_to_calendar_url, {'email_str': test_email2_str})
+
+        # make sure both calendar items turn up in the user's calendar
+        self.assertEqual(user1.userprofile.calendar.count(), 2)
