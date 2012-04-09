@@ -2,9 +2,6 @@ make google calendar refresch ical feed more often:
 * http://stackoverflow.com/questions/2158507/how-to-publish-a-dynamic-event-feed-for-google-calendar/2158546#2158546
 
 
-wishlist:
-* make it so that a user can have multiple email addresses
-
 original calendaritem.com todos
 * bug where a line break in the description breaks the ajax
 * more helpful copy on the page

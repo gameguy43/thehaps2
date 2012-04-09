@@ -2,10 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 import datetime
+import time
 from email.parser import Parser as emailParser
 import StringIO
 import rfc822
 import email.utils
+from django.utils import http
 import random
 import string
 
@@ -108,10 +110,12 @@ class UserProfile(models.Model):
         return cal.serialize()
 
     def get_ical_feed_httpresponse(self):
+        REFRESH_RATE_SECONDS = 60
         from django.http import HttpResponse
         response = HttpResponse(self.get_ical_feed(), mimetype='text/calendar')
-        response['Filename'] = 'shifts.ics'  # IE needs this
-        response['Content-Disposition'] = 'attachment; filename=shifts.ics'
+        response['Filename'] = 'calendar.ics'  # IE needs this
+        response['Content-Disposition'] = 'attachment; filename=calendar.ics'
+        response['Expires'] = http.http_date(time.time() + REFRESH_RATE_SECONDS)
         return response
 
     def get_name(self):
