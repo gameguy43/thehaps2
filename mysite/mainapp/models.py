@@ -27,6 +27,15 @@ import vobject
 CAL_ITEM_TOKEN_LENGTH = 10
 FROM_ADDRESS = "robot@calendaritem.com"
 EDIT_CAL_ITEM_URL_BASE = helpers.current_site_url() + 'edit/calendaritem/'
+
+class EmailAddress(models.Model):
+    user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related")
+    email_address = models.CharField(max_length=1000)
+
+    @classmethod
+    def get_user_with_address(cls, email_address):
+        return cls.objects.get(email_address=email_address).user
+
 class CalendarItem(models.Model):
     # CONSTANTS:
 
@@ -195,7 +204,8 @@ class Email(models.Model):
 
         # get or create the user who sent this email
         assert True # TODO: DEBUG
-        e.user, created = User.objects.get_or_create(email=e.from_email())
+        e.user = EmailAddress.get_user_with_address(cls, email_address)
+        #e.user, created = User.objects.get_or_create(email=e.from_email())
         e.save() #TODO: might not be necessary. not sure.
         assert e.user
 
@@ -230,14 +240,12 @@ class Email(models.Model):
         assert c
         return c
 
-
 def get_same_emails_on_save(sender, instance, created, **kwargs):
     if created:
         same_emails = instance.get_same_emails()
         for same_email in same_emails.all():
             instance.same_emails.add(same_email)
 post_save.connect(get_same_emails_on_save, sender=Email)
-
 
 
 
