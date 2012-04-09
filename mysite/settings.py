@@ -158,12 +158,25 @@ LOGIN_URL          = '/login-form/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'
 
+
 AUTH_PROFILE_MODULE = 'mainapp.UserProfile'
 
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+# don't create a new user if we already have one with this email address
+SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 #SOCIAL_AUTH_USER_MODEL = 'mainapp.UserProfile'
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
+)
 
 
 
