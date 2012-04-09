@@ -36,7 +36,7 @@ def to_gcal(request, slug):
     return HttpResponseRedirect(gcal_url)
 
 def main(request):
-    #return render_to_response('index.html', context_instance=RequestContext(request))
+    #return render(request, 'index.html', context_instance=RequestContext(request))
     return render(request, 'index.html')
 
 def json_str_to_dict(json_str):
@@ -78,14 +78,18 @@ def add_email_do(request):
 
     return HttpResponse("1")
 
+def show_current_user_calendar(request):
+    return show_user_calendar(request, user_id=request.user.pk)
+
+
 def show_user_calendar(request, user_id):
     # get the calendar items
-    calendar_items = UserProfile.objects.get(pk=user_id).calendar.all()
+    calendar_items = User.objects.get(pk=user_id).userprofile.calendar.all()
     # show them
     data = {
         'calendar_items' : calendar_items,
         }
-    return render_to_response('show_user_calendar.html', data)
+    return render(request, 'show_user_calendar.html', data)
     
 
 def edit_calendaritem(request, token):
@@ -107,7 +111,7 @@ def edit_calendaritem(request, token):
         'success' : success,
         'form' : form,
         }
-    return render_to_response('edit_cal_item.html', data)
+    return render(request, 'edit_cal_item.html', data)
 
 def calendar_feed(request, user_id):
     userprofile = User.objects.get(pk=user_id).userprofile
