@@ -16,7 +16,10 @@ urlpatterns = patterns('',
     # admin enabled:
     (r'^admin/', include(admin.site.urls)),
 
+    (r'^logout/', 'django.contrib.auth.views.logout'),
+
     (r'^$', 'mysite.mainapp.views.main'),
+    (r'^/$', 'mysite.mainapp.views.main'),
     (r'^ajax_add_event$', 'mysite.mainapp.views.ajax_add_event'),
 
     (r'^add/email$', 'mysite.mainapp.views.add_email_do'),
