@@ -33,8 +33,21 @@ class EmailAddress(models.Model):
     email_address = models.CharField(max_length=1000)
 
     @classmethod
-    def get_user_with_address(cls, email_address):
-        return cls.objects.get(email_address=email_address).user
+    def get_or_create_user_with_address(cls, email_address):
+        email_address_objects = cls.objects.filter(email_address=email_address)
+        if email_address_objects:
+            return email_address_objects[0].user
+        else:
+            users = User.objects.filter(email=email_address)
+        if users:
+            return users[0]
+        else:
+            return User.objects.create(email=email_address)
+
+    @classmethod
+    def backpopulate_for_existing_users(cls):
+        for user in User.objects.all():
+            cls.objects.create(user=user, email_address=user.email_address)
 
 class CalendarItem(models.Model):
     # CONSTANTS:
@@ -112,6 +125,11 @@ def create_user_profile(sender, instance, created, **kwargs):
         if not UserProfile.objects.filter(user=instance):
             UserProfile.objects.create(user=instance)
 post_save.connect(create_user_profile, sender=User)
+
+def create_user_email_address(sender, instance, created, **kwargs):
+    if created:
+        EmailAddress.objects.create(user=instance, email_address=instance.email)
+post_save.connect(create_user_email_address, sender=User)
         
 
 class Email(models.Model):
@@ -204,7 +222,7 @@ class Email(models.Model):
 
         # get or create the user who sent this email
         assert True # TODO: DEBUG
-        e.user = EmailAddress.get_user_with_address(cls, email_address)
+        e.user = EmailAddress.get_or_create_user_with_address(e.from_email())
         #e.user, created = User.objects.get_or_create(email=e.from_email())
         e.save() #TODO: might not be necessary. not sure.
         assert e.user
