@@ -90,6 +90,7 @@ class UserProfile(models.Model):
             existing_user = existing_users[0]
             for c in existing_user.userprofile.calendar.all():
                 self.calendar.add(c)
+                self.save()
             existing_user.delete()
 
     def get_ical_feed(self):
@@ -233,7 +234,6 @@ class Email(models.Model):
           setattr(e, model_field, parsed_email[email_field])
 
         # get or create the user who sent this email
-        assert True # TODO: DEBUG
         e.user = EmailAddress.get_or_create_user_with_address(e.from_email())
         #e.user, created = User.objects.get_or_create(email=e.from_email())
         e.save() #TODO: might not be necessary. not sure.

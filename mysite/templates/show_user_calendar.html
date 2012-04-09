@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block main %}
+
+{% if calendar_items %}
+
+{% for c in calendar_items %}
+    <div class="calitem_desc">
+    <h3>
+    Name
+    </h3>
+    <p>
+    {{c.name}}
+    </p>
+
+    <h3>
+    Location
+    </h3>
+    <p>
+    {{c.location}}
+    </p>
+
+    <h3>
+    Start
+    </h3>
+    <p>
+    {{c.start_datetime}}
+    </p>
+
+    <h3>
+    End
+    </h3>
+    <p>
+    {{c.end_datetime}}
+    <p>
+
+    <h4>
+    Notes
+    </h4>
+    <p class='desc'>
+    {{c.info}}
+    </p>
+    </div>
+{% endfor %}
+
+{% else %}
+DUDE THERE ARE NO CALENDAR ITEMS OMFG LAMESAUCE
+
+{% endif %}
+
+
+{% endblock %}
