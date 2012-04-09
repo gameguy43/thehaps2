@@ -82,7 +82,15 @@ class UserProfile(models.Model):
 
 
     def claim_email_address(self, email_address):
-        EmailAddress.objects.create(email_address=email_address, user=self.user)
+        # make an emailaddress
+        EmailAddress.objects.get_or_create(email_address=email_address, user=self.user)
+        # if there's already a user with this email address:
+        existing_users = User.objects.filter(email=email_address)
+        if existing_users:
+            existing_user = existing_users[0]
+            for c in existing_user.userprofile.calendar.all():
+                self.calendar.add(c)
+            existing_user.delete()
 
     def get_ical_feed(self):
         # mega huge ultra thanks to Martin De Wulf:

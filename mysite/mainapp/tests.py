@@ -195,7 +195,9 @@ class EmailTest(TestCase):
         test_email2_from_address = 'parker.phinney@gmail.com'
         test_email2_str = open(test_email2_filename, 'r').read()
 
+        third_email_addr = 'pyrak@gmail.com'
 
+        # STEP 1: CLAIMING
         # send the first email to the post handler
         Client().post(do_add_to_calendar_url, {'email_str': test_email1_str})
 
@@ -213,3 +215,11 @@ class EmailTest(TestCase):
 
         # make sure both calendar items turn up in the user's calendar
         self.assertEqual(user1.userprofile.calendar.count(), 2)
+
+        # STEP 2: MERGING
+        # finally, have yet another user claim both of these email addresses
+        user3 = User.objects.create(username='TESTUSERNAME', email=third_email_addr)
+        user3.userprofile.claim_email_address(test_email2_from_address)
+        user3.userprofile.claim_email_address(test_email1_from_address)
+
+        self.assertEqual(user3.userprofile.calendar.count(), 2)
