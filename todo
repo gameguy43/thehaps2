@@ -1,5 +1,25 @@
-make google calendar refresch ical feed more often:
+make google calendar refresh ical feed more often:
 * http://stackoverflow.com/questions/2158507/how-to-publish-a-dynamic-event-feed-for-google-calendar/2158546#2158546
+
+fix facebook auth on live server
+
+find an actually useful calendar item parser
+or hack the google calendar API
+or write one myself
+
+add ical link to the email sent to users on email receipt
+
+add non-email interface?
+    javascript bookmarklet
+    modalbox slides in
+    intelligently get the email part from gmail. not sure how.
+    ajax
+
+add interface for claiming multiple email addresses
+
+
+
+
 
 
 original calendaritem.com todos
