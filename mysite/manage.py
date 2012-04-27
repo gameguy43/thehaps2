@@ -1,4 +1,18 @@
 #!/usr/bin/python
+
+import os
+import os.path
+import sys
+THIS_FILE=os.path.abspath(__file__)
+THIS_DIR=os.path.dirname(THIS_FILE)
+UP_ONE_DIR=os.path.join(THIS_DIR, '..')
+sys.path.append(UP_ONE_DIR)
+
+# Use the modules in vendor/
+import vendor
+vendor.vendorify()
+
+
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.
