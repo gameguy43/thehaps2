@@ -15,5 +15,10 @@ $ cd mysite
 $ python manage.py syncdb
 $ python manage.py migrate
 
+ALSO: need to do this
+(TODO: add this to a migration or something)
+mysite.mainapp.models.create_user_profile(None, User.objects.get(id=1), True)
+
+
 every time:
 $ source venv/bin/activate
