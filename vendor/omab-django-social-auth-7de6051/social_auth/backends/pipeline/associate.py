@@ -8,9 +8,6 @@ from social_auth.backends.exceptions import AuthException
 
 def associate_by_email(details, *args, **kwargs):
     """Return user entry with same email address as one returned on details."""
-    print '00000000000000000'
-    print details
-    print '00000000000000000'
     email = details.get('email')
 
     warn_setting('SOCIAL_AUTH_ASSOCIATE_BY_MAIL', 'associate_by_email')
@@ -20,13 +17,8 @@ def associate_by_email(details, *args, **kwargs):
         # only if it's a single object. AuthException is raised if multiple
         # objects are returned
         try:
-            retval = {'user': User.objects.get(email=email)}
-            print 'REEEEEEEEEEEEEEEEEEEEEEEEETVAL'
-            print retval['user'].id
-            print 'REEEEEEEEEEEEEEEEEEEEEEEEETVAL'
-            return retval
+            return {'user': User.objects.get(email=email)}
         except MultipleObjectsReturned:
             raise AuthException(kwargs['backend'], 'Not unique email address.')
         except User.DoesNotExist:
-            print "99999999999USERDOESNTEXIST9999999999999999999999999999"
             pass

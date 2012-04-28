@@ -37,9 +37,6 @@ def to_gcal(request, slug):
 
 def main(request):
     #return render(request, 'index.html', context_instance=RequestContext(request))
-    print 'pppppppppppppppppppppppppppppppp'
-    print 'pk in view: ' + str(request.user.id)
-    print 'pppppppppppppppppppppppppppppppp'
     return render(request, 'index.html')
 
 def json_str_to_dict(json_str):

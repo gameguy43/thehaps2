@@ -51,9 +51,6 @@ def load_extra_data(backend, details, response, social_user, uid, user,
     extra_data field.
     """
     warn_setting('SOCIAL_AUTH_EXTRA_DATA', 'load_extra_data')
-    print '111111111111111'
-    print details
-    print '111111111111111'
 
     if setting('SOCIAL_AUTH_EXTRA_DATA', True):
         extra_data = backend.extra_data(user, uid, response, details)
