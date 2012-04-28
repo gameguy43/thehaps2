@@ -20,7 +20,11 @@ def associate_by_email(details, *args, **kwargs):
         # only if it's a single object. AuthException is raised if multiple
         # objects are returned
         try:
-            return {'user': User.objects.get(email=email)}
+            retval = {'user': User.objects.get(email=email)}
+            print 'REEEEEEEEEEEEEEEEEEEEEEEEETVAL'
+            print retval['user'].id
+            print 'REEEEEEEEEEEEEEEEEEEEEEEEETVAL'
+            return retval
         except MultipleObjectsReturned:
             raise AuthException(kwargs['backend'], 'Not unique email address.')
         except User.DoesNotExist:
