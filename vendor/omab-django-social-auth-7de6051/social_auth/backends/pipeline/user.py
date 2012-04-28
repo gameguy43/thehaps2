@@ -121,7 +121,7 @@ def update_user_details(backend, details, response, user, is_new=False, *args,
     if changed:
         print '+++++++++++++++++++++++++'
         print 'email: ' + str(user.email)
-        print 'pk: ' + user.id
+        print 'pk: ' + str(user.id)
         print '+++++++++++++++++++++++++'
         user.save()
         assert (user.email != '')  and  user.email
