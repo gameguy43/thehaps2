@@ -168,6 +168,7 @@ SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 #SOCIAL_AUTH_USER_MODEL = 'mainapp.UserProfile'
+SOCIAL_AUTH_EXTRA_DATA = True
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
     'social_auth.backends.pipeline.associate.associate_by_email',

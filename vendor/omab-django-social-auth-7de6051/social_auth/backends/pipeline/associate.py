@@ -8,6 +8,9 @@ from social_auth.backends.exceptions import AuthException
 
 def associate_by_email(details, *args, **kwargs):
     """Return user entry with same email address as one returned on details."""
+    print '00000000000000000'
+    print details
+    print '00000000000000000'
     email = details.get('email')
 
     warn_setting('SOCIAL_AUTH_ASSOCIATE_BY_MAIL', 'associate_by_email')
