@@ -38,7 +38,7 @@ def to_gcal(request, slug):
 def main(request):
     #return render(request, 'index.html', context_instance=RequestContext(request))
     print 'pppppppppppppppppppppppppppppppp'
-    print request.user.email
+    #print request.user.email
     print 'pppppppppppppppppppppppppppppppp'
     return render(request, 'index.html')
 
