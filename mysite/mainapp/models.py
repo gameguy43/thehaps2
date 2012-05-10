@@ -170,7 +170,7 @@ post_save.connect(create_user_email_address, sender=User)
 class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields
     # PARSED FROM EMAIL:
-    plaintext = models.CharField(max_length=1000)
+    plaintext = models.CharField(max_length=90000)
     subject = models.CharField(max_length=1000)
     body = models.TextField()
     # note: odd name below because from is a special word
