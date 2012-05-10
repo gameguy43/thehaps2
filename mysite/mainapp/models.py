@@ -152,6 +152,7 @@ post_save.connect(create_user_email_address, sender=User)
 class Email(models.Model):
     # http://en.wikipedia.org/wiki/Email#Header_fields
     # PARSED FROM EMAIL:
+    plaintext = models.CharField(max_length=1000)
     subject = models.CharField(max_length=1000)
     body = models.TextField()
     # note: odd name below because from is a special word
@@ -219,6 +220,7 @@ class Email(models.Model):
             # for now, just explode:
             assert False
         e = Email()
+        e.plaintext = email_as_str
         email_obj_field_to_model_field_mappings = {
             'To' : 'to',
             #'From' : 'from_field',
