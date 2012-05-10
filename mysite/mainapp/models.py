@@ -302,7 +302,8 @@ class Email(models.Model):
         # the action starts after the second occurrance of 'Forwarded message'
         GMAIL_FORWARDED_MSG_MARKER = '---------- Forwarded message ----------'
         if GMAIL_FORWARDED_MSG_MARKER in bottom_message_str:
-            bottom_message_str = bottom_message_str.split(GMAIL_FORWARDED_MSG_MARKER)[2]
+            split = bottom_message_str.split(GMAIL_FORWARDED_MSG_MARKER)
+            bottom_message_str = split.get(2,split[1])
 
         # the action starts after the /first/ "To:" line
         TO_MARKER = 'To: '
