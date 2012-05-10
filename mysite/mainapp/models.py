@@ -24,6 +24,24 @@ from django.forms import Textarea
 
 import vobject
 
+from django.utils.html import strip_tags
+
+
+
+
+#TODO: this should probably go in a utils file
+
+import re
+from htmlentitydefs import name2codepoint
+# for some reason, python 2.5.2 doesn't have this one (apostrophe)
+name2codepoint['#39'] = 39
+
+def unescape(s):
+    "unescape HTML code refs; c.f. http://wiki.python.org/moin/EscapingHtml"
+    return re.sub('&(%s);' % '|'.join(name2codepoint),
+                  lambda m: unichr(name2codepoint[m.group(1)]), s)
+
+
 
 
 CAL_ITEM_TOKEN_LENGTH = 10
@@ -261,13 +279,43 @@ class Email(models.Model):
     def get_same_emails(self):
         return Email.objects.filter(body=self.body).exclude(id=self.id)
 
+
+    def walk_email_until_we_get_to_the_bottom(self):
+        return self.body
+        #message_types = [
+        #    "text/html",
+        #    "text/plain"
+        #    ]
+        ##TODO: we need to actually think of this as a tree, i think.
+        #semantic_body = emailParser().parse(StringIO.StringIO(self.body))
+        #bottom_message = '[[DEFAULT]]'
+        #for message_piece in semantic_body.walk():
+        #    if type(message_piece) in (str, unicode):
+        #        bottom_message = message_piece
+        #    elif message_type in message_piece.get_content_type():
+        #        bottom_message = message_piece
+        #return bottom_message
+
+    def get_interesting_part_of_body(self):
+        bottom_message_str = self.walk_email_until_we_get_to_the_bottom()
+        # the action starts after the last occurrance of 'Forwarded message'
+        GMAIL_FORWARDED_MSG_MARKER = '---------- Forwarded message ----------'
+        if GMAIL_FORWARDED_MSG_MARKER in bottom_message_str:
+            # the action starts after the second occurrance of "Forwarded message"
+            bottom_message_str = bottom_message_str.split(GMAIL_FORWARDED_MSG_MARKER)[2]
+
+        # remove html tags from the email
+        bottom_message_str = strip_tags(bottom_message_str)
+        bottom_message_str = unescape(bottom_message_str)
+        return bottom_message_str
+
     def create_auto_parse_calendar_item(self):
         '''Parse the text of an email and come up with a best guess cal item
             Save that cal item and return it'''
         c = CalendarItem()
         c.name = self.subject
-        c.location = "A cool place"
-        c.info = self.body
+        c.location = "Somewhere"
+        c.info = self.get_interesting_part_of_body()
         c.start_datetime = datetime.datetime.now()
         c.end_datetime = datetime.datetime.now()
         c.save()
