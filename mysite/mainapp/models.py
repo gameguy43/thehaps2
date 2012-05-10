@@ -27,7 +27,7 @@ import vobject
 
 
 CAL_ITEM_TOKEN_LENGTH = 10
-FROM_ADDRESS = "robot@calendaritem.com"
+FROM_ADDRESS = '"CalendarItem Robot" <robot@calendaritem.com>'
 EDIT_CAL_ITEM_URL_BASE = helpers.current_site_url() + 'edit/calendaritem/'
 
 class EmailAddress(models.Model):
