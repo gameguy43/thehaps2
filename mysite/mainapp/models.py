@@ -329,7 +329,7 @@ class Email(models.Model):
         '''Parse the text of an email and come up with a best guess cal item
             Save that cal item and return it'''
         c = CalendarItem()
-        c.name = self.get_interesting_part_of_subject
+        c.name = self.get_interesting_part_of_subject()
         c.location = "Somewhere"
         c.info = self.get_interesting_part_of_body()
         c.start_datetime = datetime.datetime.now()
