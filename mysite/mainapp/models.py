@@ -298,22 +298,34 @@ class Email(models.Model):
 
     def get_interesting_part_of_body(self):
         bottom_message_str = self.walk_email_until_we_get_to_the_bottom()
-        # the action starts after the last occurrance of 'Forwarded message'
+
+        # the action starts after the second occurrance of 'Forwarded message'
         GMAIL_FORWARDED_MSG_MARKER = '---------- Forwarded message ----------'
         if GMAIL_FORWARDED_MSG_MARKER in bottom_message_str:
-            # the action starts after the second occurrance of "Forwarded message"
             bottom_message_str = bottom_message_str.split(GMAIL_FORWARDED_MSG_MARKER)[2]
+
+        # the action starts after the /first/ "To:" line
+        TO_MARKER = 'To: '
+        if TO_MARKER in bottom_message_str:
+            bottom_message_str = bottom_message_str.split(TO_MARKER)[1]
 
         # remove html tags from the email
         bottom_message_str = strip_tags(bottom_message_str)
         bottom_message_str = unescape(bottom_message_str)
         return bottom_message_str
+    
+    def get_interesting_part_of_subject(self):
+        subject = self.subject
+        FWD_PREFIX = 'Fwd: '
+        if FWD_PREFIX in subject:
+            subject = subject.split(FWD_PREFIX)[1]
+        return subject
 
     def create_auto_parse_calendar_item(self):
         '''Parse the text of an email and come up with a best guess cal item
             Save that cal item and return it'''
         c = CalendarItem()
-        c.name = self.subject
+        c.name = self.get_interesting_part_of_subject
         c.location = "Somewhere"
         c.info = self.get_interesting_part_of_body()
         c.start_datetime = datetime.datetime.now()
