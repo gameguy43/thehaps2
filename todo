@@ -1,7 +1,11 @@
+
+
+
+
 make google calendar refresh ical feed more often:
 * http://stackoverflow.com/questions/2158507/how-to-publish-a-dynamic-event-feed-for-google-calendar/2158546#2158546
+* or use google calendar api to actually add the items
 
-fix facebook auth on live server
 
 find an actually useful calendar item parser
 or hack the google calendar API

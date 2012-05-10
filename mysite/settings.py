@@ -115,9 +115,9 @@ AUTHENTICATION_BACKENDS = (
     'social_auth.backends.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
     #'social_auth.backends.twitter.TwitterBackend',
-    #'social_auth.backends.google.GoogleOAuthBackend',
-    #'social_auth.backends.google.GoogleOAuth2Backend',
-    #'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.google.GoogleOAuthBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
     #'social_auth.backends.yahoo.YahooBackend',
     #'social_auth.backends.browserid.BrowserIDBackend',
     #'social_auth.backends.contrib.linkedin.LinkedinBackend',
@@ -133,6 +133,14 @@ AUTHENTICATION_BACKENDS = (
 
 FACEBOOK_APP_ID = os.environ.get('DJANGO_FACEBOOK_APP_ID')
 FACEBOOK_API_SECRET = os.environ.get('DJANGO_FACEBOOK_API_SECRET')
+
+
+GOOGLE_DISPLAY_NAME = 'CalendarItem.com'
+
+GOOGLE_CLIENT_ID = os.environ.get('DJANGO_GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.environ.get('DJANGO_GOOGLE_CLIENT_SECRET')
+GOOGLE_DEVELOPER_KEY = os.environ.get('DJANGO_GOOGLE_DEVELOPER_KEY')
+
 #TWITTER_CONSUMER_KEY         = ''
 #TWITTER_CONSUMER_SECRET      = ''
 #LINKEDIN_CONSUMER_KEY        = ''

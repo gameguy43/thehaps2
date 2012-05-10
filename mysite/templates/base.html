@@ -44,6 +44,7 @@ Hey, {{user.email}} ({{user.first_name}} {{user.last_name}})
 {% else %}
 <h4>
 <a href="{% url socialauth_begin 'facebook' %}">Enter using Facebook</a>
+<a href="{% url socialauth_begin 'google' %}">Enter using Google</a>
 </h4>
 {% endif %}
 
