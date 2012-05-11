@@ -26,20 +26,9 @@ import vobject
 
 from django.utils.html import strip_tags
 
+from mysite.mainapp import utils
 
 
-
-#TODO: this should probably go in a utils file
-
-import re
-from htmlentitydefs import name2codepoint
-# for some reason, python 2.5.2 doesn't have this one (apostrophe)
-name2codepoint['#39'] = 39
-
-def unescape(s):
-    "unescape HTML code refs; c.f. http://wiki.python.org/moin/EscapingHtml"
-    return re.sub('&(%s);' % '|'.join(name2codepoint),
-                  lambda m: unichr(name2codepoint[m.group(1)]), s)
 
 
 
@@ -89,6 +78,9 @@ class CalendarItem(models.Model):
 
     def get_url_for_edit(self):
         return EDIT_CAL_ITEM_URL_BASE + self.token
+
+    def get_url_for_add_to_gcal(self):
+        return utils.google_url_from_calendaritem_dict(self.__dict__)
 
 def make_and_set_token_on_save(sender, instance, created, **kwargs):
     if created:
@@ -315,7 +307,7 @@ class Email(models.Model):
 
         # remove html tags from the email
         bottom_message_str = strip_tags(bottom_message_str)
-        bottom_message_str = unescape(bottom_message_str)
+        bottom_message_str = utils.unescape(bottom_message_str)
         return bottom_message_str
     
     def get_interesting_part_of_subject(self):

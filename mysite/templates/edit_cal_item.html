@@ -11,6 +11,9 @@ successful edit/add
 </span>
 </div>
 {% endif %}
+
+<a href="{{ c.get_url_for_add_to_gcal }}">add to gcal</a>
+
 <form method="POST" action="{{request.path}}">
 {{form.as_p}}
 <input type="submit" value="Save" />

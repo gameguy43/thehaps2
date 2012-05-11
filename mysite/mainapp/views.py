@@ -11,6 +11,10 @@ from mysite.mainapp.models import CalendarItem
 from mysite.mainapp.models import UserProfile
 from mysite.mainapp.models import CalendarItemForm
 from mysite.mainapp.models import Email
+
+from mysite.mainapp import utils
+
+
 from django.contrib.auth.models import User
 
 import os
@@ -25,16 +29,11 @@ from mysite.mainapp import helpers
 from mysite import settings
 
 
-def url_with_query_str_vars(url, query_str_vars_as_dict):
-    # TODO: edit this to notice if there are already query str vars and act accordingly
-    # for now, this will do horrible things unless the url currently has no question mark
-    return url + '?' + urllib.urlencode(query_str_vars_as_dict)
-
 def to_gcal(request, slug):
     #get the calendar item
     c = CalendarItem.objects.get(slug=slug)
     #get the gcal url
-    gcal_url = google_url_from_calendaritem_dict(c.__dict__)
+    gcal_url = utils.google_url_from_calendaritem_dict(c.__dict__)
     return HttpResponseRedirect(gcal_url)
 
 def main(request):
@@ -175,6 +174,7 @@ def edit_calendaritem(request, token):
     data = {
         'success' : success,
         'form' : form,
+        'c' : c,
         }
     return render(request, 'edit_cal_item.html', data)
 
@@ -220,7 +220,7 @@ def ajax_add_event(request):
     tries_left = 3
     while tries_left >= 0:
         tries_left-=1
-        c.slug = generate_hash(c.id)
+        c.slug = utils.generate_hash(c.id)
         try:
             c.save()
             break
@@ -240,35 +240,3 @@ def ajax_add_event(request):
     return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 
-def generate_hash(x):
-    x = str(x)
-    # insert some randomness so that we can "re-roll" our slugs
-    salt = os.urandom(3)
-    x+= salt
-    h = hashlib.md5()
-    h.update(x)
-    return h.hexdigest()[:5]
-
-def query_str_from_dict(values):
-    partial = values.items()
-    partial = map(lambda x: map(str, x), partial)
-    partial = map('='.join, partial)
-    partial = '&'.join(partial)
-    return partial
-    
-def google_url_from_calendaritem_dict(calitem_dict):
-    '''docs: http://www.google.com/googlecalendar/event_publisher_guide_detail.html'''
-    dt_format = '%Y%m%dT%H%M00Z'
-    google_dates = '/'.join(map(lambda dt: dt.strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
-    google_query_str = {
-        'action' : 'TEMPLATE',
-        'text' : calitem_dict.get('name', ''),
-        'dates' : google_dates,
-        'details' : calitem_dict.get('info', ''),
-        'location' : calitem_dict.get('location', ''),
-        }
-
-    google_url_base = 'http://www.google.com/calendar/event?'
-    google_query_str = query_str_from_dict(google_query_str)
-    google_url = ''.join([google_url_base, google_query_str])
-    return google_url
