@@ -1,4 +1,6 @@
+import os
 import re
+import hashlib
 from htmlentitydefs import name2codepoint
 # for some reason, python 2.5.2 doesn't have this one (apostrophe)
 name2codepoint['#39'] = 39

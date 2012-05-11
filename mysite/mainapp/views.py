@@ -19,7 +19,6 @@ from django.contrib.auth.models import User
 
 import os
 import pytz
-import hashlib
 import datetime
 
 from django.template import RequestContext
