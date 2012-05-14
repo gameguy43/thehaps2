@@ -16,6 +16,13 @@ $(function(){
         data = $('#event-info-form').serializeArray();
         timezone = jstz.determine_timezone();
         timezone_name = timezone.name();
+
+        // to help debug: print timezone info
+        console.log('your timezone:');
+        console.log(timezone);
+        console.log('your timezone name:');
+        console.log(timezone_name);
+
         data.push({'name':'timezone', 'value': timezone_name});
         console.log(data);
         data = JSON.stringify(data);
