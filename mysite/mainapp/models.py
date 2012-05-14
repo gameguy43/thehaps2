@@ -14,7 +14,6 @@ import string
 from django.template.loader import get_template
 from django.template import Context
 
-from mysite.mainapp import helpers
 
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
@@ -35,7 +34,7 @@ from mysite.mainapp import utils
 
 CAL_ITEM_TOKEN_LENGTH = 10
 FROM_ADDRESS = '"CalendarItem Robot" <robot@calendaritem.com>'
-EDIT_CAL_ITEM_URL_BASE = helpers.current_site_url() + 'edit/calendaritem/'
+EDIT_CAL_ITEM_URL_BASE = utils.current_site_url() + 'edit/calendaritem/'
 
 class EmailAddress(models.Model):
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related")

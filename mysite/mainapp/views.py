@@ -23,8 +23,6 @@ import datetime
 
 from django.template import RequestContext
 
-from mysite.mainapp import helpers
-
 from mysite import settings
 
 
@@ -249,7 +247,7 @@ def ajax_add_event(request):
         print "rolled X times and couldn't get a good slug"
         return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t get a good slug after X rolls'}), status=400)
 
-    our_url = helpers.current_site_url() + c.slug
+    our_url = utils.current_site_url() + c.slug
     return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 

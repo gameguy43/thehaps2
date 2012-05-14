@@ -21,7 +21,7 @@ I see you're trying to add something to your calendar. Rockin!
 </p>
 
 <p>
-Here's the best that we came up with:
+Here's what we think the calendar item is:
 </p>
 
 <div id="calitem_desc">
@@ -62,11 +62,22 @@ Notes
 </div>
 
 <p>
-We did our best. But we make hella mistakes.
+If there are errors, we're not surprised. To edit this calendar item, go here: <a href="{{c.get_url_for_edit}}">{{c.get_url_for_edit}}</a>. Your corrections will benefit other users trying to convert this email into a calendar item!
 </p>
 
-<p id="p_with_editlink">
-To fix it, go here: <a href="{{c.get_url_for_edit}}">{{c.get_url_for_edit}}</a>
+<p>
+Add this and other calendar items in our system for your account to your calendar of choice using this ics feed:
+</p>
+
+<p>
+{{userprofile.get_ical_feed}}
+</p>
+
+<p>
+And/or just add this calendar item to your google calendar with this link:
+</p>
+
+<p>
 </p>
 
 <p>
