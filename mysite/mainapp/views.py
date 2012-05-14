@@ -228,26 +228,9 @@ def ajax_add_event(request):
     c.info = post_data.get('info', '')
     c.start_datetime = start_datetime
     c.end_datetime  = end_datetime
+    c.save()
 
-    tries_left = 3
-    while tries_left >= 0:
-        tries_left-=1
-        c.slug = utils.generate_hash(c.id)
-        try:
-            c.save()
-            break
-        except IntegrityError:
-            print "slug collision. re-rolling..."
-            continue
-        except:
-            print "trouble putting the calendar item in the database"
-            return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t put calendar item in the database'}), status=400)
-    #if we tried X times and didn't get a slug that we could use...
-    if tries_left <0:
-        print "rolled X times and couldn't get a good slug"
-        return HttpResponse(simplejson.dumps({ 'status': 400, 'message': 'couldn\'t get a good slug after X rolls'}), status=400)
-
-    our_url = utils.current_site_url() + c.slug
+    our_url = c.get_url_for_cal_item()
     return_dict = {'our_url': our_url}
     return HttpResponse(simplejson.dumps(return_dict), mimetype='application/x-javascript')
 

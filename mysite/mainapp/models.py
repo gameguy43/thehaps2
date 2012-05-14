@@ -18,6 +18,8 @@ from django.template import Context
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 
+from django.core.urlresolvers import reverse
+
 from django.forms import ModelForm
 from django.forms import Textarea
 
@@ -75,16 +77,30 @@ class CalendarItem(models.Model):
         self.token =  ''.join(random.choice(string.letters + string.digits) for i in xrange(10))
         self.save()
 
+    def make_and_set_slug(self):
+        slug = utils.generate_hash(self.id)
+        utils.unique_slugify(self, slug)
+        self.save()
+
     def get_url_for_edit(self):
         return EDIT_CAL_ITEM_URL_BASE + self.token
 
     def get_url_for_add_to_gcal(self):
         return utils.google_url_from_calendaritem_dict(self.__dict__)
 
+    def get_url_for_cal_item(self):
+        assert self.slug
+        return utils.current_site_url() + str(self.slug)
+
 def make_and_set_token_on_save(sender, instance, created, **kwargs):
     if created:
         instance.make_and_set_token()
 post_save.connect(make_and_set_token_on_save, sender=CalendarItem)
+
+def make_and_set_slug_on_save(sender, instance, created, **kwargs):
+    if created:
+        instance.make_and_set_slug()
+post_save.connect(make_and_set_slug_on_save, sender=CalendarItem)
 
 
 class UserProfile(models.Model):
@@ -103,6 +119,10 @@ class UserProfile(models.Model):
                 self.calendar.add(c)
                 self.save()
             existing_user.delete()
+
+    def get_url_for_ical_feed(self):
+        # NOTE: we slice out the first char of the reverse() result because it's just a slash
+        return utils.current_site_url() + reverse('calendar_feed', kwargs={'user_id': self.user.id})[1:]
 
     def get_ical_feed(self):
         # mega huge ultra thanks to Martin De Wulf:

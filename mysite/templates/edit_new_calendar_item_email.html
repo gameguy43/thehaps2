@@ -4,7 +4,7 @@
 <style>
     body { height:100%;margin:0px;padding:0px; }
     #desc { font-size: .8em; }
-    #calitem_desc { margin: 0; padding: 0; border: gray 1px dashed; }
+    #calitem_desc { margin: 0; padding: 0; background-color: yellow; border: gray 1px dashed; }
     h3, h4 { margin: 0; padding: 0; }
     #calitem_desc p { margin: 0 0 5px 0; padding: 0; }
     #p_with_editlink { font-size: 1.2em; }
@@ -70,11 +70,19 @@ Add this and other calendar items in our system for your account to your calenda
 </p>
 
 <p>
-{{userprofile.get_ical_feed}}
+{{userprofile.get_url_for_ical_feed}}
 </p>
 
 <p>
 And/or just add this calendar item to your google calendar with this link:
+</p>
+
+<p>
+{{c.get_url_for_cal_item}}
+</p>
+
+<p>
+(you could also pass out the above url to make it easier for others to add the event to their calendars)
 </p>
 
 <p>
