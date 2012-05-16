@@ -1,0 +1,119 @@
+Delivered-To: gameguy43@gmail.com
+Received: by 10.64.14.201 with SMTP id r9csp166391iec;
+        Tue, 15 May 2012 16:02:55 -0700 (PDT)
+Return-Path: <the-upgoat-mafia+bncCM_Iwd36FxCewcv9BBoE2rHIcw@googlegroups.com>
+Received-SPF: pass (google.com: domain of the-upgoat-mafia+bncCM_Iwd36FxCewcv9BBoE2rHIcw@googlegroups.com designates 10.205.133.208 as permitted sender) client-ip=10.205.133.208;
+Authentication-Results: mr.google.com; spf=pass (google.com: domain of the-upgoat-mafia+bncCM_Iwd36FxCewcv9BBoE2rHIcw@googlegroups.com designates 10.205.133.208 as permitted sender) smtp.mail=the-upgoat-mafia+bncCM_Iwd36FxCewcv9BBoE2rHIcw@googlegroups.com; dkim=pass header.i=the-upgoat-mafia+bncCM_Iwd36FxCewcv9BBoE2rHIcw@googlegroups.com
+Received: from mr.google.com ([10.205.133.208])
+        by 10.205.133.208 with SMTP id hz16mr38891bkc.11.1337122974518 (num_hops = 1);
+        Tue, 15 May 2012 16:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlegroups.com; s=beta;
+        h=x-beenthere:received-spf:mime-version:sender:from:date:message-id
+         :subject:to:x-original-sender:x-original-authentication-results
+         :reply-to:precedence:mailing-list:list-id:x-google-group-id
+         :list-post:list-help:list-archive:list-unsubscribe:content-type;
+        bh=4gwi1Hz4BGu1Hc2Nw4lZ4LU3w7/j3i/fCEdU+v4ZzeU=;
+        b=sm0eULwkoYcEOv/gJa1IfoimMjcjZnBDoD9tfBPupQMToLQg0C8I0UoNc8/tpAVQKy
+         HAP7MnFwzBSVOCBoWaSG5M8kJRVrLEQ6CDv/6lhXwwiCVurcbjw0NsZy3yeOWlsDD71A
+         TpMlQF5AFSe6lhu5r+GFf528awgITiPYgioXo=
+Received: by 10.205.133.208 with SMTP id hz16mr38891bkc.11.1337122974485;
+        Tue, 15 May 2012 16:02:54 -0700 (PDT)
+X-BeenThere: the-upgoat-mafia@googlegroups.com
+Received: by 10.204.129.208 with SMTP id p16ls59827bks.7.gmail; Tue, 15 May
+ 2012 16:02:52 -0700 (PDT)
+Received: by 10.204.149.210 with SMTP id u18mr95648bkv.1.1337122972867;
+        Tue, 15 May 2012 16:02:52 -0700 (PDT)
+Received: by 10.204.149.210 with SMTP id u18mr95647bkv.1.1337122972850;
+        Tue, 15 May 2012 16:02:52 -0700 (PDT)
+Received: from mail-lpp01m010-f42.google.com (mail-lpp01m010-f42.google.com [209.85.215.42])
+        by gmr-mx.google.com with ESMTPS id hy18si774691bkc.2.2012.05.15.16.02.52
+        (version=TLSv1/SSLv3 cipher=OTHER);
+        Tue, 15 May 2012 16:02:52 -0700 (PDT)
+Received-SPF: pass (google.com: domain of danny.piccirillo@gmail.com designates 209.85.215.42 as permitted sender) client-ip=209.85.215.42;
+Received: by mail-lpp01m010-f42.google.com with SMTP id y4so86404lag.29
+        for <the-upgoat-mafia@googlegroups.com>; Tue, 15 May 2012 16:02:52 -0700 (PDT)
+Received: by 10.112.8.197 with SMTP id t5mr329076lba.46.1337122972490; Tue, 15
+ May 2012 16:02:52 -0700 (PDT)
+MIME-Version: 1.0
+Sender: the-upgoat-mafia@googlegroups.com
+Received: by 10.112.86.161 with HTTP; Tue, 15 May 2012 16:02:32 -0700 (PDT)
+From: Danny Piccirillo <danny.piccirillo@member.fsf.org>
+Date: Tue, 15 May 2012 19:02:32 -0400
+Message-ID: <CABhyRUi0stwjbLEPU0rNYgZTrBFU4_O_wQcyZANVjmWrK1pqnQ@mail.gmail.com>
+Subject: [The Upgoat Mafia] Someone reasonable writes about why they say "free software"
+To: the-upgoat-mafia@googlegroups.com
+X-Original-Sender: dannypiccirillo@gmail.com
+X-Original-Authentication-Results: gmr-mx.google.com; spf=pass (google.com:
+ domain of danny.piccirillo@gmail.com designates 209.85.215.42 as permitted
+ sender) smtp.mail=danny.piccirillo@gmail.com; dkim=pass header.i=@gmail.com
+Reply-To: the-upgoat-mafia@googlegroups.com
+Precedence: list
+Mailing-list: list the-upgoat-mafia@googlegroups.com; contact the-upgoat-mafia+owners@googlegroups.com
+List-ID: <the-upgoat-mafia.googlegroups.com>
+X-Google-Group-Id: 809779755271
+List-Post: <http://groups.google.com/group/the-upgoat-mafia/post?hl=en_US>, <mailto:the-upgoat-mafia@googlegroups.com>
+List-Help: <http://groups.google.com/support/?hl=en_US>, <mailto:the-upgoat-mafia+help@googlegroups.com>
+List-Archive: <http://groups.google.com/group/the-upgoat-mafia?hl=en_US>
+List-Unsubscribe: <http://groups.google.com/group/the-upgoat-mafia/subscribe?hl=en_US>,
+ <mailto:googlegroups-manage+809779755271+unsubscribe@googlegroups.com>
+Content-Type: multipart/alternative; boundary=e0cb4efe2af2cbdd9804c01b33f6
+
+--e0cb4efe2af2cbdd9804c01b33f6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+It's so nice when people are into free software and aren't trolls about it!
+
+http://www.reddit.com/r/linux/duplicates/tp030/free_software_open_source_fo=
+ss_floss_same_same/
+
+
+
+--=20
+=E2=98=AE =E2=99=A5 =E2=92=B6
+     .danny
+
+This email is: [  ] bloggable   [ x ] shareable with consent   [  ] lethal
+if repeated or forwarded
+
+[=F0=9D=84=BD#] The Silent Number - http://thesilentnumber.me/
+
+=C2=B5Blog: http://identi.ca/dpic
+voice: +1.617.340.3661
+
+--------------------------------------------
+Q: Why is this email five sentences or less?
+A: http://five.sentenc.es
+
+--e0cb4efe2af2cbdd9804c01b33f6
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+It&#39;s so nice when people are into free software and aren&#39;t trolls a=
+bout it!=C2=A0<div><br></div><div><a href=3D"http://www.reddit.com/r/linux/=
+duplicates/tp030/free_software_open_source_foss_floss_same_same/">http://ww=
+w.reddit.com/r/linux/duplicates/tp030/free_software_open_source_foss_floss_=
+same_same/</a><br>
+
+<div><br></div><div><br clear=3D"all"><div><br></div>-- <br>=E2=98=AE =E2=
+=99=A5 =E2=92=B6<br>
+=C2=A0=C2=A0=C2=A0=C2=A0 .danny<br>
+<br>
+This email is: [=C2=A0 ] bloggable=C2=A0=C2=A0 [ x ] shareable with consent=
+=C2=A0=C2=A0 [=C2=A0 ] lethal if repeated or forwarded<br>
+<br>
+[=F0=9D=84=BD#] The Silent Number - <a href=3D"http://thesilentnumber.me/" =
+target=3D"_blank">http://thesilentnumber.me/</a><br>
+<br>
+=C2=B5Blog: <a href=3D"http://identi.ca/dpic" target=3D"_blank">http://iden=
+ti.ca/dpic</a><br>
+voice: +1.617.340.3661<br>
+<br>
+--------------------------------------------<br>
+Q: Why is this email five sentences or less?<br>
+A: <a href=3D"http://five.sentenc.es/" target=3D"_blank">http://five.senten=
+c.es</a><br>
+</div></div>
+
+--e0cb4efe2af2cbdd9804c01b33f6--

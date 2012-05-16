@@ -164,7 +164,7 @@ class UserProfile(models.Model):
 
         #make the subject
         if email:
-            email_subject = 'Re: ' + email.subject
+            email_subject = 'Re: ' + email.subject.replace('\n','')
         else:
             email_subject = '[CalendarItem] NEW: ' + c.name
 
