@@ -106,6 +106,7 @@ post_save.connect(make_and_set_slug_on_save, sender=CalendarItem)
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     calendar = models.ManyToManyField("CalendarItem")
+    timezone = models.CharField(max_length=100)
 
 
     def claim_email_address(self, email_address):
