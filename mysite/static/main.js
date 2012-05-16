@@ -52,21 +52,51 @@ $(function(){
     if (is_event_add_page) {
         set_current_datetime_as_defaults();
     }
+    else if (is_event_edit_page) {
+        //convert_datetimes_to_local();
+    }
 
 });
+
+function datetime_as_date_and_time_strs(datetime){
+    time = datetime.getHours() + ':' + datetime.getMinutes();
+    date = (datetime.getMonth() + 1) + '/' + datetime.getDate() + '/' + datetime.getFullYear();
+    return {'time': time, 'date': date};
+}
 
 function set_current_datetime_as_defaults(){
     // grab the current time/date and set it as the defaults
     now = new Date();
     in_one_hour = new Date(now.getTime() + (1000*60*60));
-    time = now.getHours() + ':' + now.getMinutes();
-    time_in_one_hour = in_one_hour.getHours() + ':' + in_one_hour.getMinutes();
-    date = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
-    date_in_one_hour = (in_one_hour.getMonth() + 1) + '/' + in_one_hour.getDate() + '/' + in_one_hour.getFullYear();
 
-    $('.start_date').val(date);
-    $('.end_date').val(date_in_one_hour);
-    $('.start_time').val(time);
-    $('.end_time').val(time_in_one_hour);
+    update_fields_with_datetimes(now, in_one_hour);
+}
+
+function update_fields_with_datetimes(start_datetime, end_datetime){
+    start_datetime_str = datetime_as_date_and_time_strs(start_datetime);
+    end_datetime_str = datetime_as_date_and_time_strs(end_datetime);
+
+    $('.start_date').val(start_datetime_str['date']);
+    $('.start_time').val(start_datetime_str['time']);
+    $('.end_date').val(end_datetime_str['date']);
+    $('.end_time').val(end_datetime_str['time']);
+}
+
+function get_tz_utc_offset_secs(){
+    return new Date().getTimezoneOffset() * 60000;
+}
+
+function convert_datetimes_to_local(){
+    start_datetime_str = $('.start_date').val() + ' ' + $('.start_time').val();
+    end_datetime_str = $('.end_date').val() + ' ' + $('.end_time').val();
+
+    start_datetime = new Date(start_datetime_str);
+    end_datetime = new Date(end_datetime_str);
+
+    tz_utc_offset_secs = get_tz_utc_offset_secs();
+    start_datetime = new Date(start_datetime.getTime() + tz_utc_offset_secs);
+    end_datetime = new Date(end_datetime.getTime() + tz_utc_offset_secs);
+
+    update_fields_with_datetimes(start_datetime, end_datetime);
 }
 
