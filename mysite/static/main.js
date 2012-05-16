@@ -1,18 +1,19 @@
+datepicker_options = {
+    showButtonPanel: true,
+    showOn: "both",
+    buttonImage: "/images/calendar.gif",
+    buttonImageOnly: true
+};
+timepicker_options = datepicker_options;
+
 $(function(){
-    datepicker_options = {
-        showButtonPanel: true,
-        showOn: "both",
-        buttonImage: "images/calendar.gif",
-        buttonImageOnly: true
-    };
-    timepicker_options = datepicker_options;
 
-    $('#start_date').datepicker(datepicker_options);
-    $('#end_date').datepicker(datepicker_options);
-    $('#start_time').timepicker(timepicker_options);
-    $('#end_time').timepicker(timepicker_options);
+    $('.start_date').datepicker(datepicker_options);
+    $('.end_date').datepicker(datepicker_options);
+    $('.start_time').timepicker(timepicker_options);
+    $('.end_time').timepicker(timepicker_options);
 
-    $('#submit').click(function(){
+    $('.submit').click(function(){
         data = $('#event-info-form').serializeArray();
         timezone = jstz.determine_timezone();
         timezone_name = timezone.name();
@@ -48,6 +49,13 @@ $(function(){
         });
         return false;
     });
+    if (is_event_add_page) {
+        set_current_datetime_as_defaults();
+    }
+
+});
+
+function set_current_datetime_as_defaults(){
     // grab the current time/date and set it as the defaults
     now = new Date();
     in_one_hour = new Date(now.getTime() + (1000*60*60));
@@ -56,9 +64,9 @@ $(function(){
     date = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
     date_in_one_hour = (in_one_hour.getMonth() + 1) + '/' + in_one_hour.getDate() + '/' + in_one_hour.getFullYear();
 
-    $('#start_date').val(date);
-    $('#end_date').val(date_in_one_hour);
-    $('#start_time').val(time);
-    $('#end_time').val(time_in_one_hour);
-});
+    $('.start_date').val(date);
+    $('.end_date').val(date_in_one_hour);
+    $('.start_time').val(time);
+    $('.end_time').val(time_in_one_hour);
+}
 

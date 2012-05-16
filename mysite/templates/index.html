@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block head %}
+<script type="text/javascript">
+var is_event_add_page = true;
+</script>
 {% endblock %}
+
 {% block main %}
 
 
@@ -27,11 +31,11 @@ Start:
 <fieldset class="onerow">
 <div class="inline-block">
 <label for="start_date">date: </label>
-<input type="date" name="start_date" id="start_date"/>
+<input type="date" name="start_date" id="start_date" class="start_date" />
 </div>
 <div class="inline-block">
 <label for="start_date">time: </label>
-<input type="time" name="start_time" id="start_time"/>
+<input type="time" name="start_time" id="start_time" class="start_time" />
 </div>
 </fieldset>
 </fieldset>
@@ -43,11 +47,11 @@ End:
 <fieldset class="onerow">
 <div class="inline-block">
 <label for="start_date">date: </label>
-<input type="date" name="end_date" id="end_date"/>
+<input type="date" name="end_date" id="end_date" class="end_date" />
 </div>
 <div class="inline-block">
 <label for="start_date">time: </label>
-<input type="time" name="end_time" id="end_time"/>
+<input type="time" name="end_time" id="end_time" class="end_time" />
 </div>
 </fieldset>
 </fieldset>
@@ -59,7 +63,7 @@ End:
 </fieldset>
 
 <fieldset id="submit">
-<input type="submit" id="submit" value="Get Calendar Link &raquo;" />
+<input type="submit" id="submit" class="submit" value="Get Calendar Link &raquo;" />
 </fieldset>
 
 

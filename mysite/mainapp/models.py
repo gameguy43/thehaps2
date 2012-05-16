@@ -29,6 +29,7 @@ from django.utils.html import strip_tags
 
 from mysite.mainapp import utils
 
+import django.forms as forms
 
 
 
@@ -365,10 +366,29 @@ post_save.connect(get_same_emails_on_save, sender=Email)
 
 
 
+class AugmentedSplitDateTimeWidget(forms.SplitDateTimeWidget):
+    """
+    A Widget that splits datetime input into two <input type="text"> boxes.
+    """
+
+    def __init__(self, class_prefix='', attrs={}, date_format=None, time_format=None):
+
+        date_input_attrs, time_input_attrs = attrs.copy(), attrs.copy()
+        date_input_attrs['class'] = class_prefix + '_date'
+        time_input_attrs['class'] = class_prefix + '_time'
+        assert date_input_attrs.copy()
+        assert time_input_attrs.copy()
+        widgets = (forms.DateInput(attrs=date_input_attrs, format='%m/%d/%Y'),
+                   forms.TimeInput(attrs=time_input_attrs, format='%H:%M'))
+        super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
+
+
 class CalendarItemForm(ModelForm):
     class Meta:
         model = CalendarItem
         exclude = ('slug', 'token')
         widgets = {
-            'info': Textarea(attrs={'cols': 20, 'rows': 10}),
+            'info': Textarea(attrs={'cols': 20, 'rows': 20}),
+            'start_datetime': AugmentedSplitDateTimeWidget(class_prefix='start'),
+            'end_datetime': AugmentedSplitDateTimeWidget(class_prefix='end'),
             }
