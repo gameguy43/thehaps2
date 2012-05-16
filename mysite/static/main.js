@@ -13,8 +13,14 @@ $(function(){
     $('.start_time').timepicker(timepicker_options);
     $('.end_time').timepicker(timepicker_options);
 
+    if (is_event_edit_page) {
+        $('input[type="submit"]').click(function(){
+            convert_datetimes_to_utc();
+        });
+    }
     $('.submit').click(function(){
         data = $('#event-info-form').serializeArray();
+        console.log(data);
         timezone = jstz.determine_timezone();
         timezone_name = timezone.name();
 
@@ -53,7 +59,7 @@ $(function(){
         set_current_datetime_as_defaults();
     }
     else if (is_event_edit_page) {
-        //convert_datetimes_to_local();
+        convert_datetimes_to_local();
     }
 
 });
@@ -82,10 +88,6 @@ function update_fields_with_datetimes(start_datetime, end_datetime){
     $('.end_time').val(end_datetime_str['time']);
 }
 
-function get_tz_utc_offset_secs(){
-    return new Date().getTimezoneOffset() * 60000;
-}
-
 function convert_datetimes_to_local(){
     start_datetime_str = $('.start_date').val() + ' ' + $('.start_time').val();
     end_datetime_str = $('.end_date').val() + ' ' + $('.end_time').val();
@@ -93,10 +95,36 @@ function convert_datetimes_to_local(){
     start_datetime = new Date(start_datetime_str);
     end_datetime = new Date(end_datetime_str);
 
-    tz_utc_offset_secs = get_tz_utc_offset_secs();
-    start_datetime = new Date(start_datetime.getTime() + tz_utc_offset_secs);
-    end_datetime = new Date(end_datetime.getTime() + tz_utc_offset_secs);
+    start_datetime = convert_to_local(start_datetime);
+    end_datetime = convert_to_local(end_datetime);
 
     update_fields_with_datetimes(start_datetime, end_datetime);
 }
 
+function convert_datetimes_to_utc(){
+    start_datetime_str = $('.start_date').val() + ' ' + $('.start_time').val();
+    end_datetime_str = $('.end_date').val() + ' ' + $('.end_time').val();
+
+    start_datetime = new Date(start_datetime_str);
+    end_datetime = new Date(end_datetime_str);
+
+    start_datetime = convert_to_utc(start_datetime);
+    end_datetime = convert_to_utc(end_datetime);
+
+    update_fields_with_datetimes(start_datetime, end_datetime);
+}
+
+
+function get_tz_utc_offset_millisecs(){
+    return new Date().getTimezoneOffset() * 60000;
+}
+
+function convert_to_local(datetime){
+    tz_utc_offset_millisecs = get_tz_utc_offset_millisecs();
+    return new Date(datetime.getTime() - tz_utc_offset_millisecs);
+}
+
+function convert_to_utc(datetime){
+    tz_utc_offset_millisecs = get_tz_utc_offset_millisecs();
+    return new Date(datetime.getTime() + tz_utc_offset_millisecs);
+}
