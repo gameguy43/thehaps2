@@ -1,4 +1,3 @@
-[CalendarItem] NEW: {{c.name|truncatewords:10}}
 <html>
 <head>
 <style>
@@ -24,6 +23,8 @@ I see you're trying to add something to your calendar. Rockin!
 Here's what we think the calendar item is:
 </p>
 
+<hr>
+<hr>
 <div id="calitem_desc">
 <h3>
 Name
@@ -60,6 +61,8 @@ Notes
 {{c.info|truncatewords_html:100}}
 </p>
 </div>
+<hr>
+<hr>
 
 <p>
 If there are errors, we're not surprised. To edit this calendar item, go here: <a href="{{c.get_url_for_edit}}">{{c.get_url_for_edit}}</a>. Your corrections will benefit other users trying to convert this email into a calendar item!

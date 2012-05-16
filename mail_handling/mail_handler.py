@@ -15,6 +15,10 @@ SUCCESS_OUTPUT = '1'
 remote_url = 'http://calendaritem.com/add/email'
 local_url = "http://localhost:8000/add/email"
 
+######################
+# FLAG CONFIGS
+######################
+
 parser = OptionParser()
 # "log" or "only_server_response"
 parser.add_option("-o", "--output", action="store", type="string", dest="output", default="log", help="'log' or 'only_server_response'")
@@ -22,8 +26,11 @@ parser.add_option("-o", "--output", action="store", type="string", dest="output"
 parser.add_option("-d", "--destination_url", action="store", type="string", dest="dest_url", default="log", help="where to send the email as post? options are hard-coded in this file. so do one of 'default' or 'local'")
 parser.add_option("-i", "--input_file", action="store", type="string", dest="in_file", default="stdin", help="path to sample email file. if stdin (default), just read from stdin (cat the file and pipe to this script)")
 
-(options, args) = parser.parse_args()
+######################
+# PARSE FLAGS -- figure out which server we're sending the email to
+######################
 
+(options, args) = parser.parse_args()
 if options.dest_url == 'default':
     destination_url = remote_url
 elif options.dest_url == 'local':
@@ -31,29 +38,44 @@ elif options.dest_url == 'local':
 else:
     destination_url = remote_url
 
+######################
+# log output
+######################
 if options.output == 'log':
     print "======================================"
     print "datetime:"
     print datetime.datetime.now()
 
+
+######################
+# read the email from stdin or a provided file
+######################
 fp = sys.stdin
 if options.in_file != 'stdin':
     fp = open(options.in_file, 'r')
-
 # get the email as a string
 email_str = fp.read()
 
+
+######################
+# log output
+######################
 if options.output == 'log':
     print "email str:"
     print email_str
 
-post_data = {
-    'email_str' : email_str,
-    }
-fp = urllib.urlopen(destination_url,
-                    urllib.urlencode(post_data))
+
+######################
+# send the email to Heroku as a post request
+######################
+post_data = { 'email_str' : email_str }
+fp = urllib.urlopen(destination_url, urllib.urlencode(post_data))
 output = fp.read()
 
+
+######################
+# log output
+######################
 if options.output == 'log':
     print "server response:"
     print output
@@ -61,6 +83,10 @@ if options.output == 'log':
 elif options.output == 'only_server_response':
     print output
 
+
+######################
+# CASE: SOMETHING WENT WRONG ON HEROKU'S END
+######################
 if output != SUCCESS_OUTPUT:
     from email.parser import Parser as emailParser
     import email.utils

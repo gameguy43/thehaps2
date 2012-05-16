@@ -35,7 +35,7 @@ from mysite.mainapp import utils
 
 
 CAL_ITEM_TOKEN_LENGTH = 10
-FROM_ADDRESS = '"CalendarItem Robot" <robot@calendaritem.com>'
+FROM_ADDRESS = '"CalendarItem Robot" <add@calendaritem.com>'
 EDIT_CAL_ITEM_URL_BASE = utils.current_site_url() + 'edit/calendaritem/'
 
 class EmailAddress(models.Model):
@@ -153,15 +153,19 @@ class UserProfile(models.Model):
         else:
             return 'dude'
 
-    def send_email_inviting_to_edit_cal_item(self, cal_item):
+    def send_email_inviting_to_edit_cal_item(self, cal_item, email=None):
         data_for_email_template = {
             'c' : cal_item,
             'userprofile' : self,
             }
-        email_str = get_template('edit_new_calendar_item_email.html').render(Context(data_for_email_template))
-        email_by_lines = email_str.split('\n')
-        email_subject = email_by_lines[0]
-        email_body = ''.join(email_by_lines[1:])
+        email_body = get_template('edit_new_calendar_item_email.html').render(Context(data_for_email_template))
+
+        #make the subject
+        if email:
+            email_subject = 'Re: ' + email.subject
+        else:
+            email_subject = '[CalendarItem] NEW: ' + c.name
+
         msg = EmailMessage(email_subject, email_body, FROM_ADDRESS, [self.user.email])
         msg.content_subtype = "html"
         msg.send()

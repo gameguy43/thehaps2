@@ -11,8 +11,6 @@ find an actually useful calendar item parser
 or hack the google calendar API
 or write one myself
 
-add ical link to the email sent to users on email receipt
-
 add non-email interface?
     javascript bookmarklet
     modalbox slides in

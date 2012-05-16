@@ -117,27 +117,38 @@ def json_str_to_dict(json_str):
 def add_email_do(request):
     # grab the email from post
     email_as_str = request.POST['email_str']
+
+    # parse the email and save it to the database
     e = Email.create_and_save_from_email_str(email_as_str)
+
+    # we'll keep the calendar item here
     c = None
+
     # case: we already have this email
     if e.same_emails.exists():
         # grab the associated event from the database
         # (just assume that the first same email speaks for them all)
         c = e.same_emails.all()[:1][0].calendar_item
     # case: this email is new to the system
-    # we didn't make this an else because we also want to create in the case
-    # where we had a previous email but no calendar item for it
+    # we didn't make this an else because we also want to create in
+    # the case where we had a previous email but no calendar item
+    # for it
     if not c:
         # come up with our best guess parse of the event info
         # also, create a new event for it and put it in the database
         c = e.create_auto_parse_calendar_item()
     
-    # add the event to their event list
+    # make sure we have a calendar item by now
     assert c
+
+    # add the event to the user's event list
+    # note: we set the user attr of the email automatically by
+    # noticing the from: address of the message and 
+    # get_or_create-ing a user account for that address
     e.user.userprofile.calendar.add(c)
 
     # send confirmation email with the event info (inviting them to modify)
-    e.user.userprofile.send_email_inviting_to_edit_cal_item(c)
+    e.user.userprofile.send_email_inviting_to_edit_cal_item(c, email=e)
 
     return HttpResponse("1")
 
