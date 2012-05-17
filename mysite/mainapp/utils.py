@@ -67,7 +67,9 @@ def text_to_cal_item_dict_via_google(text):
     return event_info_dict
 
 def naiveify_datetime(dt):
-    return dt.astimezone(pytz.utc).replace(tzinfo=None)
+    if dt.tzinfo:
+        return dt.astimezone(pytz.utc).replace(tzinfo=None)
+    return dt
 
 
 def current_site_url():
