@@ -49,7 +49,7 @@ class EmailAddress(models.Model):
         if email_address_objects:
             return email_address_objects[0].user
         else:
-            users = User.objects.filter(email=email_address)
+            users = User.objects.filter(email=email_address, username=email_address)
         if users:
             return users[0]
         else:

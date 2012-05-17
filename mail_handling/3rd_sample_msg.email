@@ -1,0 +1,62 @@
+MIME-Version: 1.0
+Sender: gameguy43@gmail.com
+Received: by 10.64.14.201 with HTTP; Wed, 16 May 2012 20:33:45 -0700 (PDT)
+In-Reply-To: <CAEg6ZHn88jYG3=BuYOEnkGeEBLGNusHWVFXeZH_o4SRTz1ED8A@mail.gmail.com>
+References: <CAEg6ZHn88jYG3=BuYOEnkGeEBLGNusHWVFXeZH_o4SRTz1ED8A@mail.gmail.com>
+Date: Wed, 16 May 2012 23:33:45 -0400
+Delivered-To: gameguy43@gmail.com
+X-Google-Sender-Auth: zfGIR7i7G3_Gr4FFVms8gRaIlYo
+Message-ID: <CA+-tdkx=4P==tx0XUv5OoWDgRxTu0uvDpBMjCXyT0hGunio5Gg@mail.gmail.com>
+Subject: Fwd: [Commons-l] UploadWizard: Batch copying of metadata
+From: Parker Phinney <parker.phinney@gmail.com>
+To: Add calendar item <add@calendaritem.com>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ----------
+From: Erik Moeller <erik@wikimedia.org>
+Date: Wed, May 16, 2012 at 5:30 PM
+Subject: [Commons-l] UploadWizard: Batch copying of metadata
+To: Wikimedia Commons Discussion List <commons-l@lists.wikimedia.org>
+
+
+As of the deployment of the wmf3 branch today, Upload Wizard has a new
+feature that lets you copy the metadata of the first file to the
+entire batch (you can pick which parts of the metadata you want to
+copy). This should be helpful for users regularly uploading large
+batches.
+
+To use it, upload a batch of more than one file through
+https://commons.wikimedia.org/wiki/Special:UploadWizard and use the
+"Copy information to all uploads below" menu on the first upload.
+
+Please report bugs in BugZilla or use the feedback page to share more
+detailed comments:
+
+https://commons.wikimedia.org/wiki/Commons:Upload_Wizard_feedback
+
+Note that the feature tries to be clever about the numbering of the
+first file -- if there's a number with less than four digits in the
+file already, it increments it; otherwise it adds and increments "01".
+If you're uploading a file with a number in the name that should not
+be incremented, like a street address, but still want to auto-number
+all uploads, just add "01" -- it will always increase the rightmost
+number. We'll see if we're being too clever here and may revert to
+just stupidly adding "01" to the title.
+
+Cheers,
+Erik
+--
+Erik M=F6ller
+VP of Engineering and Product Development, Wikimedia Foundation
+
+Support Free Knowledge: https://wikimediafoundation.org/wiki/Donate
+
+_______________________________________________
+Commons-l mailing list
+Commons-l@lists.wikimedia.org
+https://lists.wikimedia.org/mailman/listinfo/commons-l
+
+
+--=20
+http://www.madebyparker.com
