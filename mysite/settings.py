@@ -113,11 +113,11 @@ INSTALLED_APPS = (
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.OpenIDBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    #'social_auth.backends.twitter.TwitterBackend',
-    'social_auth.backends.google.GoogleOAuthBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
     'social_auth.backends.google.GoogleBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    #'social_auth.backends.google.GoogleOAuthBackend',
+    #'social_auth.backends.twitter.TwitterBackend',
     #'social_auth.backends.yahoo.YahooBackend',
     #'social_auth.backends.browserid.BrowserIDBackend',
     #'social_auth.backends.contrib.linkedin.LinkedinBackend',
@@ -131,15 +131,31 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
+'''
 FACEBOOK_APP_ID = os.environ.get('DJANGO_FACEBOOK_APP_ID')
 FACEBOOK_API_SECRET = os.environ.get('DJANGO_FACEBOOK_API_SECRET')
+'''
 
 
 GOOGLE_DISPLAY_NAME = 'CalendarItem.com'
 
 GOOGLE_CLIENT_ID = os.environ.get('DJANGO_GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('DJANGO_GOOGLE_CLIENT_SECRET')
+
 GOOGLE_DEVELOPER_KEY = os.environ.get('DJANGO_GOOGLE_DEVELOPER_KEY')
+GOOGLE_ACCESS_TOKEN = os.environ.get('DJANGO_GOOGLE_ACCESS_TOKEN')
+
+#GOOGLE_CONSUMER_KEY          = ''
+#GOOGLE_CONSUMER_SECRET       = ''
+
+GOOGLE_OAUTH2_CLIENT_ID      = GOOGLE_CLIENT_ID
+GOOGLE_OAUTH2_CLIENT_SECRET  = GOOGLE_CLIENT_SECRET
+
+GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.google.com/calendar/feeds/']
+
+GOOGLE_QUICK_ADD_USER = os.environ.get('DJANGO_GOOGLE_USERNAME')
+GOOGLE_QUICK_ADD_PASSWORD = os.environ.get('DJANGO_GOOGLE_PASSWORD')
+
 
 #TWITTER_CONSUMER_KEY         = ''
 #TWITTER_CONSUMER_SECRET      = ''
@@ -147,10 +163,6 @@ GOOGLE_DEVELOPER_KEY = os.environ.get('DJANGO_GOOGLE_DEVELOPER_KEY')
 #LINKEDIN_CONSUMER_SECRET     = ''
 #ORKUT_CONSUMER_KEY           = ''
 #ORKUT_CONSUMER_SECRET        = ''
-#GOOGLE_CONSUMER_KEY          = ''
-#GOOGLE_CONSUMER_SECRET       = ''
-#GOOGLE_OAUTH2_CLIENT_ID      = ''
-#GOOGLE_OAUTH2_CLIENT_SECRET  = ''
 #FOURSQUARE_CONSUMER_KEY      = ''
 #FOURSQUARE_CONSUMER_SECRET   = ''
 #GITHUB_APP_ID                = ''

@@ -345,12 +345,22 @@ class Email(models.Model):
     def create_auto_parse_calendar_item(self):
         '''Parse the text of an email and come up with a best guess cal item
             Save that cal item and return it'''
+        first_guess_dict = utils.text_to_cal_item_dict(self.get_interesting_part_of_body)
+
         c = CalendarItem()
         c.name = self.get_interesting_part_of_subject()
-        c.location = "Somewhere"
+
+        c.location = first_guess_dict['location']
+
         c.info = self.get_interesting_part_of_body()
-        c.start_datetime = datetime.datetime.now()
-        c.end_datetime = datetime.datetime.now()
+
+        c.start_datetime = first_guess_dict['start_datetime']
+        c.end_datetime = first_guess_dict['end_datetime']
+
+        # naiveify the start and end dates
+        c.start_datetime = utils.naiveify_datetime(c.start_datetime)
+        c.end_datetime = utils.naiveify_datetime(c.end_datetime)
+
         c.save()
         self.calendar_item = c
         self.save()

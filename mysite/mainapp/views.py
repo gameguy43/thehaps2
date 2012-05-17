@@ -42,6 +42,7 @@ def main(request):
 #    from oauth2client.file import Storage
 #    from oauth2client.client import OAuth2WebServerFlow
 #    from oauth2client.client import OAuth2Credentials
+#    from oauth2client.client import AccessTokenCredentials
 #    from oauth2client.tools import run
 #
 #    FLAGS = gflags.FLAGS
@@ -65,10 +66,15 @@ def main(request):
 #    # If the Credentials don't exist or are invalid, run through the native client
 #    # flow. The Storage object will ensure that if successful the good
 #    # Credentials will get written back to a file.
+#    '''
 #    storage = Storage('calendar.dat')
 #    credentials = storage.get()
 #    if credentials is None or credentials.invalid == True:
 #        credentials = run(FLOW, storage)
+#    '''
+#    token = settings.GOOGLE_ACCESS_TOKEN
+#    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19'
+#    credentials = AccessTokenCredentials(token, user_agent)
 #
 #    '''
 #    credentials = OAuth2Credentials(
@@ -95,9 +101,15 @@ def main(request):
 #    service = build(serviceName='calendar', version='v3', http=http,
 #        developerKey=settings.GOOGLE_DEVELOPER_KEY)
 #
+#    event_text = 'party at parker\'s place on tuesday at midnight'
+#    import ipdb; ipdb.set_trace()
+#    #event = service.events().quickAdd( calendarId='{primary}', text=event_text).execute()
+#    #print event['id']
+#    #print event
 #
-
-    #return render(request, 'index.html', context_instance=RequestContext(request))
+#
+#
+#    #return render(request, 'index.html', context_instance=RequestContext(request))
     return render(request, 'index.html')
 
 def json_str_to_dict(json_str):
@@ -230,7 +242,7 @@ def ajax_add_event(request):
 
     # convert to utc and then naiveify
     # note: we need to naive-ify or else heroku will aggressively try to convert to another timezone at insertion time
-    start_datetime, end_datetime = map(lambda dt: dt.astimezone(pytz.utc).replace(tzinfo=None), [start_datetime, end_datetime])
+    start_datetime, end_datetime = map(utils.naiveify_datetime, [start_datetime, end_datetime])
 
     # make the calendaritem
     c = CalendarItem()

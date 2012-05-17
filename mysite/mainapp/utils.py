@@ -9,6 +9,67 @@ from django.contrib.sites.models import Site
 from django.template.defaultfilters import slugify
 from mysite import settings
 
+import datetime
+import dateutil.parser
+import pytz
+
+GOOGLE_DT_FORMAT = '%Y%m%dT%H%M00Z'
+
+
+def text_to_cal_item_dict(text):
+    return text_to_cal_item_dict_via_google(text)
+
+def text_to_cal_item_dict_via_google(text):
+    # thanks to https://github.com/insanum/gcalcli
+    # used you as a reference
+
+    from gdata.calendar.service import *
+
+    gcal = CalendarService()
+    gcal.ssl = True
+
+    SOURCE = 'calendaritem.com'
+    SERVICE = 'cl'
+    USERNAME = settings.GOOGLE_QUICK_ADD_USER
+    PASSWORD = settings.GOOGLE_QUICK_ADD_PASSWORD
+
+     # authenticate and login to google calendar
+    try:
+        gcal.ClientLogin(
+                         username=USERNAME,
+                         password=PASSWORD,
+                         service=SERVICE,
+                         source=SOURCE)
+    except Exception, e:
+        print ("Error: " + str(e) + "!\n")
+
+    target_calendar = '/calendar/feeds/default/private/full'
+
+    quickEvent = gdata.calendar.CalendarEventEntry()
+    quickEvent.content = atom.Content(text=text)
+    quickEvent.quick_add = gdata.calendar.QuickAdd(value='true')
+
+    event = gcal.InsertEvent(quickEvent, target_calendar)
+
+    event_info_dict = {}
+
+    event_info_dict['name'] = event.title.text
+    event_info_dict['info'] = ''
+
+    event_info_dict['start_datetime'] = event.when[0].start_time
+    event_info_dict['start_datetime'] = dateutil.parser.parse(event_info_dict['start_datetime'])
+
+    event_info_dict['end_datetime'] = event.when[0].end_time
+    event_info_dict['end_datetime'] = dateutil.parser.parse(event_info_dict['end_datetime'])
+
+    event_info_dict['location'] = event.where[0].value_string
+
+    return event_info_dict
+
+def naiveify_datetime(dt):
+    return dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+
 def current_site_url():
     """Returns fully qualified URL (WITH trailing slash) for the current site."""
 
@@ -31,8 +92,7 @@ def unescape(s):
 
 def google_url_from_calendaritem_dict(calitem_dict):
     '''docs: http://www.google.com/googlecalendar/event_publisher_guide_detail.html'''
-    dt_format = '%Y%m%dT%H%M00Z'
-    google_dates = '/'.join(map(lambda dt: dt.strftime(dt_format), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
+    google_dates = '/'.join(map(lambda dt: dt.strftime(GOOGLE_DT_FORMAT), [calitem_dict['start_datetime'], calitem_dict['end_datetime']]))
     google_query_str = {
         'action' : 'TEMPLATE',
         'text' : calitem_dict.get('name', ''),
