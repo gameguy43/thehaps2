@@ -345,12 +345,14 @@ class Email(models.Model):
     def create_auto_parse_calendar_item(self):
         '''Parse the text of an email and come up with a best guess cal item
             Save that cal item and return it'''
-        first_guess_dict = utils.text_to_cal_item_dict(self.get_interesting_part_of_body)
+        first_guess_dict = utils.text_to_cal_item_dict(self.get_interesting_part_of_body())
 
         c = CalendarItem()
         c.name = self.get_interesting_part_of_subject()
 
         c.location = first_guess_dict['location']
+        if not c.location:
+            c.location = 'somewhere'
 
         c.info = self.get_interesting_part_of_body()
 
