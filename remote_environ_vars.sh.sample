@@ -1,0 +1,40 @@
+heroku config:remove DJANGO_SECRET_KEY 
+heroku config:add DJANGO_SECRET_KEY=''
+
+heroku config:remove DJANGO_DEBUG
+heroku config:add DJANGO_DEBUG='False'
+
+heroku config:remove DJANGO_EMAIL_HOST_USER
+heroku config:add DJANGO_EMAIL_HOST_USER='pyrak'
+
+heroku config:remove DJANGO_EMAIL_HOST
+heroku config:add DJANGO_EMAIL_HOST=''
+
+heroku config:remove DJANGO_EMAIL_PORT
+heroku config:add DJANGO_EMAIL_PORT=''
+
+heroku config:remove DJANGO_EMAIL_USE_TLS
+heroku config:add DJANGO_EMAIL_USE_TLS='1'
+
+heroku config:remove DJANGO_EMAIL_HOST_PASSWORD
+heroku config:add DJANGO_EMAIL_HOST_PASSWORD=''
+
+heroku config:remove PYTHONPATH
+heroku config:add PYTHONPATH='/app'
+
+heroku config:remove PYTHONPATH
+heroku config:add PYTHONPATH='/app'
+
+
+heroku config:remove DJANGO_FACEBOOK_APP_ID
+heroku config:add DJANGO_FACEBOOK_APP_ID=''
+
+heroku config:remove DJANGO_FACEBOOK_API_SECRET
+heroku config:add DJANGO_FACEBOOK_API_SECRET=''
+
+
+heroku config:remove DJANGO_GOOGLE_USERNAME
+heroku config:add DJANGO_GOOGLE_USERNAME=''
+
+heroku config:remove DJANGO_GOOGLE_PASSWORD
+heroku config:add DJANGO_GOOGLE_PASSWORD=''
